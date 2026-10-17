@@ -9,6 +9,9 @@ Cómo añadir una novedad:
 Cuando cambias el título de la primera entrada, los jugadores verán el registro al abrir el juego.
 -->
 
+## v1.5 · 17 de octubre de 2026
+- Los profesores ya tienen nombre: **J. Alonso** (el Fundador), **H. Sole** (la Examinadora) y **P. Flor** (la Prefecta).
+
 ## v1.4 · 17 de octubre de 2026
 - Nuevo registro de novedades al empezar el juego.
 - Sonidos distintos al corregir un examen: campanita si aciertas, zumbido si te equivocas.

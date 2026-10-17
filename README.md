@@ -19,7 +19,7 @@ Un juego de terror de turno de noche ambientado en un colegio de monjas, hecho p
 ## Las cuatro tareas
 
 - **Reloj:** el tiempo solo avanza mientras funciona el reloj de la torre. Si se queda sin cuerda, la noche se detiene.
-- **Exámenes:** marca cada respuesta como bien o mal. Cuantos más exámenes queden en la mesa, más rápido camina la Examinadora.
+- **Exámenes:** marca cada respuesta como bien o mal. Cuantos más exámenes queden en la mesa, más rápido camina H. Sole, la Examinadora.
 - **Velas:** en la CAM 2B, toca las velas apagadas para encenderlas. Si se apagan las cinco, el coro viene a por ti.
 - **Torno:** cuando llamen, devuelve el objeto que te pidan en latín. El libro de portería de la mesa tiene las palabras.
 
