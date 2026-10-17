@@ -36,7 +36,7 @@ En uno o dos minutos la web se actualiza. Los jugadores verán el registro la pr
 
 ## Partidas guardadas
 
-El juego guarda solo el progreso en el navegador de cada jugador: noches superadas, mejores notas, nombres, idioma y la configuración de la noche personalizada. Se guarda en ese dispositivo y ese navegador, así que no pasa de un ordenador a otro.
+El juego guarda el progreso de cada jugador en su navegador: noches superadas, mejores notas, nombres, idioma y la configuración de la noche personalizada. Se guarda en ese dispositivo y ese navegador, así que no pasa de un ordenador a otro.
 
 ## Notas
 
