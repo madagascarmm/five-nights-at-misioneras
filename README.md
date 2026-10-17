@@ -23,6 +23,21 @@ Un juego de terror de turno de noche ambientado en un colegio de monjas, hecho p
 - **Velas:** en la CAM 2B, toca las velas apagadas para encenderlas. Si se apagan las cinco, el coro viene a por ti.
 - **Torno:** cuando llamen, devuelve el objeto que te pidan en latín. El libro de portería de la mesa tiene las palabras.
 
+## Cómo añadir novedades
+
+El registro de novedades que aparece al empezar el juego está en el archivo [`novedades.md`](novedades.md). Para añadir una:
+
+1. Abre `novedades.md` en GitHub y pulsa el lápiz (Editar).
+2. Escribe una entrada nueva arriba del todo, empezando con `## ` y el título, por ejemplo `## v1.5 · 20 de octubre de 2026`.
+3. Pon cada cambio en su propia línea empezando por `- `.
+4. Pulsa **Commit changes**.
+
+En uno o dos minutos la web se actualiza. Los jugadores verán el registro la próxima vez que abran el juego, porque la primera entrada es nueva para ellos.
+
+## Partidas guardadas
+
+El juego guarda solo el progreso en el navegador de cada jugador: noches superadas, mejores notas, nombres, idioma y la configuración de la noche personalizada. Se guarda en ese dispositivo y ese navegador, así que no pasa de un ordenador a otro.
+
 ## Notas
 
 Funciona en cualquier navegador actual, en el ordenador o en el móvil en horizontal. El sonido empieza después del primer clic.
