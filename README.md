@@ -23,6 +23,11 @@ Un juego de terror de turno de noche ambientado en un colegio de monjas, hecho p
 - **Velas:** en la CAM 2B, toca las velas apagadas para encenderlas. Si se apagan las cinco, el coro viene a por ti.
 - **Torno:** cuando llamen, devuelve el objeto que te pidan en latín. El libro de portería de la mesa tiene las palabras.
 
+## J. Angel (desde la noche 3)
+
+- Cuando grite **«HAZ UNA LETRITA»**, todos los demás se congelan hasta que escribas su palabra. Las palabras salen del glosario de Empresa e Iniciativa Emprendedora, de la A a la Z. Si no llegas a tiempo, te deja aturdida 6 segundos y los demás suben dos puntos de agresividad.
+- Si dice **«Freerider»**, manda a su águila: abre las cámaras y pulsa las 8 dianas antes de que se acabe el tiempo.
+
 ## Cómo añadir novedades
 
 El registro de novedades que aparece al empezar el juego está en el archivo [`novedades.md`](novedades.md). Para añadir una:

@@ -9,6 +9,15 @@ Cómo añadir una novedad:
 Cuando cambias el título de la primera entrada, los jugadores verán el registro al abrir el juego.
 -->
 
+## v2.0 · 17 de octubre de 2026
+- **Nuevo personaje: J. Angel.** Aparece desde la noche 3, grita «HAZ UNA LETRITA» y congela a todos hasta que escribas su palabra. Si no llegas a tiempo, te deja aturdida 6 segundos y todos los demás se vuelven más agresivos.
+- **Su águila:** a veces la manda con un «Freerider». Busca las 8 dianas en las cámaras antes de que te alcance.
+- Las palabras de J. Angel salen del glosario de Empresa e Iniciativa Emprendedora, de la A a la Z.
+- J. Angel también aparece en la noche personalizada y en el profesorado.
+- Los sustos suenan mucho más fuertes.
+- Salir a mitad de una noche ya no cuenta como superada: el menú te deja continuar la noche que estabas jugando.
+- El juego se pausa si haces clic fuera de la ventana.
+
 ## v1.5 · 17 de octubre de 2026
 - Los profesores ya tienen nombre: **J. Alonso** (el Fundador), **H. Sole** (la Examinadora) y **P. Flor** (la Prefecta).
 
