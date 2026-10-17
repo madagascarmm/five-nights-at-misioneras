@@ -262,8 +262,7 @@ kbd{font-family:var(--f-hud);font-size:20px;padding:0 6px;border:1px solid rgba(
 
   <div id="hud" hidden>
     <div id="hBtns"><button id="bPause" data-ta="aPause">II</button><button id="bMute" data-ta="aSound">♪</button></div>
-    <div id="hTop"><div id="hTime">12 AM</div><div id="hNight"></div>
-      <div id="hDuties"><div id="dExams"></div><div id="dClock"></div><div id="dCandles"></div></div></div>
+    <div id="hTop"><div id="hTime">12 AM</div><div id="hNight"></div></div>
     <div id="hPower"><div id="pPct"></div><small id="pUse"></small></div>
     <div id="caption"></div>
     <div id="toast"></div>
@@ -624,7 +623,7 @@ TX.en={
  paused:'Paused',resume:'RESUME',restart:'RESTART NIGHT',quit:'QUIT TO TITLE',
  rotate:'Turn your phone sideways for the full shift.',
  camsUp:'▲ CAMERAS ▲',camsDown:'▼ LOWER ▼',
- hNight:(n,h)=>`${n==='C'?'CUSTOM':'NIGHT '+n} · ${h<3?'MATINS':h<6?'VIGIL':'LAUDS'}`,
+ hNight:n=>n==='C'?'CUSTOM NIGHT':`NIGHT ${n}`,
  hExams:n=>`EXAMS ${n} ON DESK`,hClock:b=>`CLOCK ${b}`,hClockStop:'CLOCK STOPPED · WIND IT',
  hCandlesNone:'CANDLES —',hCandles:(d,h)=>`CANDLES ${d} @${h}AM`,hCandlesUn:'CANDLES UNCHECKED',hGen:p=>`GENERATOR ${p}%`,hUse:b=>`USAGE ${b}`,
  cams:{'1A':"FOUNDER'S HALL",'1B':'LIBRARY','1C':'CLOISTER','2A':'STAFF ROOM','2B':'CHAPEL','2C':'CORRIDOR OF SAINTS'},
@@ -771,7 +770,7 @@ TX.es={
  paused:'En pausa',resume:'CONTINUAR',restart:'REINICIAR NOCHE',quit:'SALIR AL TÍTULO',
  rotate:'Gira el móvil para jugar en horizontal.',
  camsUp:'▲ CÁMARAS ▲',camsDown:'▼ BAJAR ▼',
- hNight:(n,h)=>`${n==='C'?'PERSONALIZADA':'NOCHE '+n} · ${h<3?'MAITINES':h<6?'VIGILIA':'LAUDES'}`,
+ hNight:n=>n==='C'?'NOCHE PERSONALIZADA':`NOCHE ${n}`,
  hExams:n=>`EXÁMENES: ${n} EN LA MESA`,hClock:b=>`RELOJ ${b}`,hClockStop:'RELOJ PARADO · DALE CUERDA',
  hCandlesNone:'VELAS —',hCandles:(d,h)=>`VELAS ${d} @${h}AM`,hCandlesUn:'VELAS SIN REVISAR',hGen:p=>`GENERADOR ${p}%`,hUse:b=>`CONSUMO ${b}`,
  cams:{'1A':'SALA DEL FUNDADOR','1B':'BIBLIOTECA','1C':'CLAUSTRO','2A':'SALA DE PROFESORES','2B':'CAPILLA','2C':'PASILLO DE LOS SANTOS'},
@@ -1284,9 +1283,6 @@ function setTxt(id,txt,cls){const el=$(id);if(hudCache[id]!==txt+cls){hudCache[i
 function syncHud(force){if(!g)return;if(force)for(const k in hudCache)delete hudCache[k];
   const h=g.hour;setTxt('#hTime',`${h===0?12:h} AM`,g.clockStopped?'crit':'');
   setTxt('#hNight',t('hNight',g.night,h),'');
-  setTxt('#dExams',t('hExams',g.exams),g.exams>=8?'crit':g.exams>=5?'warn':'');
-  const sp=Math.round(g.spring),bars=Math.round(sp/12.5);setTxt('#dClock',g.clockStopped?t('hClockStop'):t('hClock','▮'.repeat(bars)+'▯'.repeat(8-bars)),g.clockStopped?'crit':sp<25?'warn':'');
-  const sc=g.seenCandles;setTxt('#dCandles',g.cfg.choir<=0?t('hCandlesNone'):sc?t('hCandles','●'.repeat(sc.lit)+'○'.repeat(5-sc.lit),sc.hour||12):t('hCandlesUn'),sc&&sc.lit<=1?'crit':sc&&sc.lit<=2?'warn':'');
   const pw=Math.max(0,Math.ceil(g.power));setTxt('#pPct',t('hGen',pw),pw<=10?'crit':pw<=25?'warn':'');
   setTxt('#pUse',t('hUse','▮'.repeat(g.use)+'▯'.repeat(6-g.use)),'');
   for(const [id,v] of [['#doorL',g.doorL],['#doorR',g.doorR],['#lightL',g.lightL],['#lightR',g.lightR]]){const el=$(id),s=String(v);if(el.getAttribute('aria-pressed')!==s)el.setAttribute('aria-pressed',s);}
