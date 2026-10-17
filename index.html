@@ -232,6 +232,9 @@ kbd{font-family:var(--f-hud);font-size:20px;padding:0 6px;border:1px solid rgba(
 @media (prefers-reduced-motion: reduce){ .crit,#camRec,#hotTorno.req,#sixam .six{animation:none} .panel{animation:none} }
 
 .fCard canvas{height:118px!important}
+.tHead{display:flex;justify-content:space-between;gap:12px}
+#tFails{color:var(--vellum-dim)}
+#tFails.crit{color:#ff5b50;animation:none}
 .exFb{position:absolute;left:32px;right:32px;bottom:156px;font-family:var(--f-hand);font-size:42px;line-height:1;color:var(--ink);transform:rotate(-2deg);opacity:0;transition:opacity .15s}
 .exFb.on{opacity:1}
 .introL h2{white-space:nowrap;font-size:100px!important}
@@ -297,7 +300,7 @@ kbd{font-family:var(--f-hud);font-size:20px;padding:0 6px;border:1px solid rgba(
   </div>
 
   <div id="pTorno" class="panel" hidden>
-    <div class="tHead" data-t="tHead"></div>
+    <div class="tHead"><span data-t="tHead"></span><span id="tFails"></span></div>
     <div class="tReq" id="tReq"></div>
     <div class="tBar"><i id="tBar"></i></div>
     <div class="tItems" id="tItems"></div>
@@ -535,10 +538,10 @@ TX.en={
  aTorno:'Open the torno',aExams:'Grade exams',aCrank:'Hold to wind the tower clock',aLog:'Open the logbook',aCandle:n=>`Relight candle ${n}`,
  door:'DOOR',light:'LIGHT',tagTorno:'TORNO · T',tagExams:'EXAMS · G',tagWind:'HOLD TO WIND',tagLog:'LOGBOOK',
  exStudent:'Student:',exClass:'Class:',exOk:'✓ CORRECT',exNo:'✗ WRONG',close:'CLOSE',exPile:n=>`${n} on the pile`,
- tHead:'THE TORNO',tHint:'Send back exactly what she names.',tReq:w=>`«Da mihi ${w}.»`,
+ tHead:'THE TORNO',tFails:n=>`MISTAKES ${n}/2`,tHint:'Send back exactly what she names.',tReq:w=>`«Da mihi ${w}.»`,
  logTitle:"The Porter's Logbook",
  logDl:'<dt>panem</dt><dd>bread</dd><dt>lucem</dt><dd>light, a candle</dd><dt>clavem</dt><dd>the key</dd><dt>rosarium</dt><dd>the rosary</dd><dt>aquam</dt><dd>holy water</dd>',
- logUl:"<li>Empty frame on CAM 1A: hold the LEFT light.</li><li>Three knocks on the right: close the RIGHT door.</li><li>Keep the tower clock wound, or six never comes.</li><li>Relight dark candles on CAM 2B.</li><li>Don't stare at the Prefect on the cameras.</li>",
+ logUl:"<li>Empty frame on CAM 1A: hold the LEFT light.</li><li>Three knocks on the right: close the RIGHT door.</li><li>Keep the tower clock wound, or six never comes.</li><li>Relight dark candles on CAM 2B.</li><li>Don't stare at the Prefect on the cameras.</li><li>Never send the torno the wrong thing twice.</li>",
  item_panem:'Bread',item_lucem:'Candle',item_clavem:'Key',item_rosarium:'Rosary',item_aquam:'Holy water',
  tEyebrow:'COLEGIO MISIONERAS · EST. 1958',
  tLede:'You are the new night portress. Keep the doors, the clock, the exams, the candles and the torno until the bells ring for Lauds at six.',
@@ -555,7 +558,7 @@ TX.en={
   {k:'founder',where:"FOUNDER'S HALL · CAM 1A · LEFT DOOR",bio:'Opened the school in 1958 and signed every diploma by hand. His portrait has hung in the main hall ever since, except at night.',how:'When the frame on CAM 1A is empty he is walking the left wing. Hold the left light; if he is in the doorway, close the door. Portraits do not move while watched.'},
   {k:'examiner',where:'STAFF ROOM · CAM 2A · RIGHT DOOR',bio:'Has corrected exams in red ink since before anyone can remember, and has never once rounded up.',how:'Every exam on your desk makes her walk faster. Three knocks on the right: close the door, and she slides two more exams underneath it.'},
   {k:'choir',name:'The Choir',where:'CHAPEL · CAM 2B',bio:'Three choir girls rehearsing the same Christmas carol since the power failed in 1963.',how:'They face the altar while the votive candles burn. Relight dark candles on CAM 2B. If all five go out, relight two before they arrive.'},
-  {k:'torno',name:'Sister of the Torno',where:'BEHIND THE TORNO',bio:'No one on staff has seen more of her than one pale hand. She asks for things in Latin, politely, once.',how:'When she knocks, open the torno and send back exactly what she names. The wrong item leaves you four seconds.'},
+  {k:'torno',name:'Sister of the Torno',where:'BEHIND THE TORNO',bio:'No one on staff has seen more of her than one pale hand. She asks for things in Latin, politely, once.',how:'When she knocks, open the torno and send back exactly what she names. One wrong item leaves you four seconds. A second one is fatal.'},
   {k:'prefect',where:'ANY CAMERA · THE DARK',bio:'Keeps discipline in the corridors and believes the night should be silent, including your cameras.',how:'If she is on the camera you are watching, switch away fast or she cuts the feed. If the generator dies, she comes with a candle.'}],
  hTitle:'How to survive',
  helpBody:`<div><h3>CONTROLS</h3><table>
@@ -570,7 +573,7 @@ TX.en={
 <tr><td>CLOCK</td><td>Time only moves while the tower clock runs. If the spring winds down, the night stops and the Founder grows restless.</td></tr>
 <tr><td>EXAMS</td><td>Each exam left on the desk makes the Examiner walk faster. Marking one wrong makes her angrier still.</td></tr>
 <tr><td>CANDLES</td><td>On CAM 2B, tap dark votive candles to relight them. If all five go out, the choir comes for you.</td></tr>
-<tr><td>TORNO</td><td>She asks in Latin. Send back the right item before her patience runs out. The logbook on your desk has the words.</td></tr></table>
+<tr><td>TORNO</td><td>She asks in Latin. Send back the right item before her patience runs out. Two wrong items in one night and she takes you. The logbook on your desk has the words.</td></tr></table>
 <h3 style="margin-top:16px">TIP</h3><p style="margin:0;color:var(--vellum-dim)">Portraits don't move while someone is watching. Watching the Founder's camera holds him still, but cameras cost power.</p></div>`,
  inEyebrow:"THE PORTER'S LOGBOOK",bStart:'BEGIN SHIFT',titleBtn:'TITLE',
  noteHead:n=>`THE PORTER'S LOGBOOK · ${n==='C'?'CUSTOM NIGHT':'NIGHT '+n}`,
@@ -606,7 +609,7 @@ TX.en={
   founder:{title:'Framed.',body:()=>`Your portrait now hangs beside ${names.founder}'s in the Founder's Hall. It is a very good likeness.`,tip:'When the frame on CAM 1A is empty, hold the LEFT light. If he is in the doorway, close the left door until you hear two raps. Watching his camera holds him still.'},
   examiner:{title:'See me.',body:()=>`${names.examiner} graded your night. It did not go well.`,tip:'Three knocks on the right means close the RIGHT door. A smaller exam pile makes her walk slower.'},
   choir:{title:'Encore.',body:()=>'You have joined the Christmas choir of 1963. Rehearsal resumes tomorrow at midnight.',tip:'Check CAM 2B often and tap dark candles. If all five go out, relight two before the girls reach you.'},
-  torno:{title:'Clausura.',body:()=>'The torno only turns one way. You are on the other side of it now.',tip:'When someone knocks at the torno, open it and send back the item she names in Latin. The logbook on the desk has the words.'},
+  torno:{title:'Clausura.',body:()=>'The torno only turns one way. You are on the other side of it now.',tip:'When someone knocks at the torno, open it and send back the item she names in Latin. Two wrong items in one night is fatal. The logbook on the desk has the words.'},
   prefect:{title:'Shhh.',body:()=>`The generator ran dry and ${names.prefect} came down the cloister with her own candle.`,tip:'Doors, lights and cameras all drain the generator. Close a door only while someone is standing behind it.'}},
  lauds:'Lauds. The bells of Misioneras are ringing.',rcHead2:'Report card',rcBy:'Graded by',
  rcTitle:n=>n==='C'?'Custom night':`Night ${n} · ${names.player}`,
@@ -630,7 +633,7 @@ TX.en={
  c_clockStop:'[the tower clock has stopped]',c_clockGo:'[the clock is ticking again]',c_steps:'[footsteps in the cloister]',
  c_founderLeave:'[two raps on the left door, then footsteps leaving]',c_knock3:'[three knocks on the right door]',t_slid:'Slid under the right door: +2 exams',
  c_choirStop:'[the singing stops. Small footsteps leave the chapel.]',c_choirBack:'[the singing starts again in the chapel]',c_choirSing:'[singing from the chapel]',
- c_torno:'[knocking at the torno]',c_deo:'«Deo gratias.»',c_nonhoc:'«Non hoc.» Not that one.',c_shh:n=>`«Shhh.» ${n} switched the cameras off.`,c_genDies:'[the generator dies]',
+ c_torno:'[knocking at the torno]',c_deo:'«Deo gratias.»',c_nonhoc:'«Non hoc.» Not that one. One more mistake and she comes for you.',c_shh:n=>`«Shhh.» ${n} switched the cameras off.`,c_genDies:'[the generator dies]',
  t_noExams:'No exams on the desk.',t_misgrade:n=>`Marked wrongly. ${n} noticed.`,t_noTorno:'Nobody is at the torno.',
  c_greet:w=>`You: «Ave María Purísima.» She: «Sin pecado concebida. Da mihi ${w}.»`,
  maths:'Maths',fb_wasWrong:a=>`It was wrong. Answer: ${a}`,fb_wasRight:'That answer was right.',
@@ -682,10 +685,10 @@ TX.es={
  aTorno:'Abrir el torno',aExams:'Corregir exámenes',aCrank:'Mantén pulsado para dar cuerda al reloj',aLog:'Abrir el libro de portería',aCandle:n=>`Encender la vela ${n}`,
  door:'PUERTA',light:'LUZ',tagTorno:'TORNO · T',tagExams:'EXÁMENES · G',tagWind:'DAR CUERDA',tagLog:'LIBRO DE PORTERÍA',
  exStudent:'Alumna:',exClass:'Curso:',exOk:'✓ BIEN',exNo:'✗ MAL',close:'CERRAR',exPile:n=>`Quedan ${n}`,
- tHead:'EL TORNO',tHint:'Devuelve exactamente lo que nombre.',tReq:w=>`«Da mihi ${w}.»`,
+ tHead:'EL TORNO',tFails:n=>`FALLOS ${n}/2`,tHint:'Devuelve exactamente lo que nombre.',tReq:w=>`«Da mihi ${w}.»`,
  logTitle:'Libro de Portería',
  logDl:'<dt>panem</dt><dd>pan</dd><dt>lucem</dt><dd>luz, una vela</dd><dt>clavem</dt><dd>la llave</dd><dt>rosarium</dt><dd>el rosario</dd><dt>aquam</dt><dd>agua bendita</dd>',
- logUl:'<li>Marco vacío en la CAM 1A: mantén la luz IZQUIERDA.</li><li>Tres golpes a la derecha: cierra la puerta DERECHA.</li><li>Mantén el reloj con cuerda o las seis no llegarán nunca.</li><li>Enciende las velas apagadas en la CAM 2B.</li><li>No te quedes mirando a la Prefecta en las cámaras.</li>',
+ logUl:'<li>Marco vacío en la CAM 1A: mantén la luz IZQUIERDA.</li><li>Tres golpes a la derecha: cierra la puerta DERECHA.</li><li>Mantén el reloj con cuerda o las seis no llegarán nunca.</li><li>Enciende las velas apagadas en la CAM 2B.</li><li>No te quedes mirando a la Prefecta en las cámaras.</li><li>Nunca te equivoques dos veces con el torno.</li>',
  item_panem:'Pan',item_lucem:'Vela',item_clavem:'Llave',item_rosarium:'Rosario',item_aquam:'Agua bendita',
  tEyebrow:'COLEGIO MISIONERAS · DESDE 1958',
  tLede:'Eres la nueva portera de noche. Vigila las puertas, el reloj, los exámenes, las velas y el torno hasta que suenen las campanas de Laudes a las seis.',
@@ -702,7 +705,7 @@ TX.es={
   {k:'founder',where:'SALA DEL FUNDADOR · CAM 1A · PUERTA IZQUIERDA',bio:'Abrió el colegio en 1958 y firmó cada diploma a mano. Su retrato cuelga en la sala principal desde entonces, salvo por la noche.',how:'Cuando el marco de la CAM 1A está vacío, recorre el ala izquierda. Mantén la luz izquierda y, si está en la puerta, ciérrala. Los retratos no se mueven mientras alguien los mira.'},
   {k:'examiner',where:'SALA DE PROFESORES · CAM 2A · PUERTA DERECHA',bio:'Corrige exámenes en tinta roja desde antes de que nadie recuerde, y nunca ha redondeado una nota hacia arriba.',how:'Cada examen que hay en tu mesa la hace caminar más rápido. Tres golpes a la derecha: cierra la puerta, y te pasará dos exámenes más por debajo.'},
   {k:'choir',name:'El Coro',where:'CAPILLA · CAM 2B',bio:'Tres niñas del coro que ensayan el mismo villancico desde el apagón de 1963.',how:'Miran al altar mientras las velas ardan. Enciende las velas apagadas en la CAM 2B. Si se apagan las cinco, enciende dos antes de que lleguen.'},
-  {k:'torno',name:'La Hermana del Torno',where:'DETRÁS DEL TORNO',bio:'Nadie del personal ha visto de ella más que una mano pálida. Pide las cosas en latín, con educación, una sola vez.',how:'Cuando llame, abre el torno y devuelve exactamente lo que nombre. Si le das lo que no es, te quedan cuatro segundos.'},
+  {k:'torno',name:'La Hermana del Torno',where:'DETRÁS DEL TORNO',bio:'Nadie del personal ha visto de ella más que una mano pálida. Pide las cosas en latín, con educación, una sola vez.',how:'Cuando llame, abre el torno y devuelve exactamente lo que nombre. Con un fallo te quedan cuatro segundos. El segundo fallo es mortal.'},
   {k:'prefect',where:'CUALQUIER CÁMARA · LA OSCURIDAD',bio:'Mantiene la disciplina en los pasillos y cree que la noche debe ser silenciosa, cámaras incluidas.',how:'Si aparece en la cámara que estás mirando, cambia rápido o cortará la señal. Si el generador se apaga, vendrá con una vela.'}],
  hTitle:'Cómo sobrevivir',
  helpBody:`<div><h3>CONTROLES</h3><table>
@@ -717,7 +720,7 @@ TX.es={
 <tr><td>RELOJ</td><td>El tiempo solo avanza mientras funciona el reloj de la torre. Si se queda sin cuerda, la noche se detiene y el Fundador se inquieta.</td></tr>
 <tr><td>EXÁMENES</td><td>Cada examen que quede en la mesa hace que la Examinadora camine más rápido. Corregir uno mal la enfada todavía más.</td></tr>
 <tr><td>VELAS</td><td>En la CAM 2B, toca las velas apagadas para encenderlas. Si se apagan las cinco, el coro viene a por ti.</td></tr>
-<tr><td>TORNO</td><td>Pide las cosas en latín. Devuelve el objeto correcto antes de que se le acabe la paciencia. El libro de portería de tu mesa tiene las palabras.</td></tr></table>
+<tr><td>TORNO</td><td>Pide las cosas en latín. Devuelve el objeto correcto antes de que se le acabe la paciencia. Si fallas dos veces en una noche, te lleva con ella. El libro de portería de tu mesa tiene las palabras.</td></tr></table>
 <h3 style="margin-top:16px">CONSEJO</h3><p style="margin:0;color:var(--vellum-dim)">Los retratos no se mueven mientras alguien los mira. Mirar la cámara del Fundador lo mantiene quieto, pero las cámaras gastan energía.</p></div>`,
  inEyebrow:'LIBRO DE PORTERÍA',bStart:'EMPEZAR TURNO',titleBtn:'TÍTULO',
  noteHead:n=>`LIBRO DE PORTERÍA · ${n==='C'?'NOCHE PERSONALIZADA':'NOCHE '+n}`,
@@ -753,7 +756,7 @@ TX.es={
   founder:{title:'Enmarcada.',body:()=>'Ahora tu retrato cuelga en la Sala del Fundador, al lado del suyo. Se te parece muchísimo.',tip:'Cuando el marco de la CAM 1A esté vacío, mantén la luz IZQUIERDA. Si está en la puerta, ciérrala hasta que oigas dos golpes. Mirar su cámara lo mantiene quieto.'},
   examiner:{title:'Ven a verme.',body:()=>`${names.examiner} ha corregido tu noche. No ha ido bien.`,tip:'Tres golpes a la derecha: cierra la puerta DERECHA. Con menos exámenes en la mesa camina más despacio.'},
   choir:{title:'¡Otra!',body:()=>'Ahora formas parte del coro de la Navidad de 1963. El ensayo sigue mañana a medianoche.',tip:'Mira la CAM 2B a menudo y toca las velas apagadas. Si se apagan las cinco, enciende dos antes de que lleguen las niñas.'},
-  torno:{title:'Clausura.',body:()=>'El torno solo gira en un sentido. Ahora estás al otro lado.',tip:'Cuando llamen al torno, ábrelo y devuelve el objeto que nombre en latín. El libro de portería de la mesa tiene las palabras.'},
+  torno:{title:'Clausura.',body:()=>'El torno solo gira en un sentido. Ahora estás al otro lado.',tip:'Cuando llamen al torno, ábrelo y devuelve el objeto que nombre en latín. Dos fallos en una noche son mortales. El libro de portería de la mesa tiene las palabras.'},
   prefect:{title:'Shhh.',body:()=>`El generador se quedó sin energía y ${names.prefect} bajó por el claustro con su propia vela.`,tip:'Las puertas, las luces y las cámaras gastan generador. Cierra una puerta solo mientras haya alguien detrás.'}},
  lauds:'Laudes. Suenan las campanas de Misioneras.',rcHead2:'Boletín de notas',rcBy:'Corregido por',
  rcTitle:n=>n==='C'?'Noche personalizada':`Noche ${n} · ${names.player}`,
@@ -777,7 +780,7 @@ TX.es={
  c_clockStop:'[el reloj de la torre se ha parado]',c_clockGo:'[el reloj vuelve a funcionar]',c_steps:'[pasos en el claustro]',
  c_founderLeave:'[dos golpes en la puerta izquierda y unos pasos que se alejan]',c_knock3:'[tres golpes en la puerta derecha]',t_slid:'Por debajo de la puerta derecha: +2 exámenes',
  c_choirStop:'[el canto se detiene. Unos pasos pequeños salen de la capilla.]',c_choirBack:'[el canto vuelve a sonar en la capilla]',c_choirSing:'[cantos desde la capilla]',
- c_torno:'[llaman al torno]',c_deo:'«Deo gratias.»',c_nonhoc:'«Non hoc.» Eso no.',c_shh:n=>`«Shhh.» ${n} ha apagado las cámaras.`,c_genDies:'[el generador se apaga]',
+ c_torno:'[llaman al torno]',c_deo:'«Deo gratias.»',c_nonhoc:'«Non hoc.» Eso no. Un fallo más y viene a por ti.',c_shh:n=>`«Shhh.» ${n} ha apagado las cámaras.`,c_genDies:'[el generador se apaga]',
  t_noExams:'No hay exámenes en la mesa.',t_misgrade:n=>`Mal corregido. ${n} se ha dado cuenta.`,t_noTorno:'No hay nadie en el torno.',
  c_greet:w=>`Tú: «Ave María Purísima.» Ella: «Sin pecado concebida. Da mihi ${w}.»`,
  maths:'Matemáticas',fb_wasWrong:a=>`Estaba mal. Era: ${a}`,fb_wasRight:'Esa respuesta estaba bien.',
@@ -1166,7 +1169,7 @@ function startNight(n,custom){
     exams:base.exams!=null?base.exams:3,examT:0,examEvery:base.examEvery||clamp(40-base.examiner,18,40),examPen:0,
     candles:[1,1,1,1,1],seenCandles:null,choirT:null,choirCap:false,
     F:{pos:0,t:0,door:0,seen:false},E:{pos:0,t:0,door:0,seen:false},
-    tor:{state:'idle',ang:Math.PI,target:Math.PI,want:null,timer:0,max:1,next:rand(22,38),item:null,spinT:0,greeted:false},
+    tor:{state:'idle',ang:Math.PI,target:Math.PI,want:null,timer:0,max:1,next:rand(22,38),item:null,spinT:0,greeted:false,fails:0},
     P:{cam:null,left:0,gaze:0,next:14},out:null,scare:null,cfgStart:n==='C'?Object.assign({},custom):null,
     st:{graded:0,mis:0,relit:0,torServed:0,torTotal:0,stops:0}};
   showScreen(null);$('#hud').hidden=false;$('#officeUI').hidden=false;$('#camUI').hidden=true;$('#camBar').hidden=false;
@@ -1214,7 +1217,7 @@ function updTorno(dt){const tr=g.tor,ai=g.cfg.torno;tr.ang=approach(tr.ang,tr.ta
   else if(tr.state==='spin'){tr.spinT-=dt;if(tr.spinT<=0){tr.state='idle';tr.item=null;tr.next=rand(Math.max(18,70-ai*2.5),Math.max(30,100-ai*3));}}}
 function serve(id){const tr=g.tor;if(!g||tr.state!=='req')return;
   if(id===tr.want){tr.state='spin';tr.item=id;tr.target=Math.PI;tr.spinT=1.2;g.st.torServed++;AU.torno();AU.chime();caption(t('c_deo'));closePanels();}
-  else{AU.wrong();tr.timer=Math.min(tr.timer,4);caption(t('c_nonhoc'));}}
+  else{tr.fails++;if(tr.fails>=2){scare('torno');return;}AU.wrong();AU.knock(0,1,'wood');tr.timer=Math.min(tr.timer,4);caption(t('c_nonhoc'));syncTornoFails();}}
 function updPrefect(dt){const p=g.P,ai=g.cfg.prefect;if(ai<=0)return;
   if(!p.cam){p.next-=dt;if(p.next<=0){p.next=10;if(ri(1,30)<=ai){const opts=CAMS.filter(id=>!(g.cams&&g.cam===id));p.cam=pick(opts);p.left=9;p.gaze=0;}}return;}
   p.left-=dt;if(g.cams&&g.cam===p.cam&&g.camOff<=0){p.gaze+=dt;if(p.gaze>1.4){g.camOff=10;p.cam=null;AU.shh();caption(t('c_shh',names.prefect));}}
@@ -1327,8 +1330,9 @@ function mark(says){if(!g||examLock||$('#pExam').hidden)return;examLock=true;con
   g.exams=Math.max(0,g.exams-1);
   setTimeout(()=>{if(!g||mode!=='play'){examLock=false;return;}if(g.exams>0&&!$('#pExam').hidden){g.curExam=newExam();fillExam();}else{$('#pExam').hidden=true;examLock=false;}},ok?380:1500);}
 function openTorno(){if(!g||g.cams||g.out)return;const tr=g.tor;if(tr.state!=='req'){toast(t('t_noTorno'));return;}closePanels();
-  const word=tr.want;$('#tReq').textContent=t('tReq',word);$('#pTorno').hidden=false;
+  const word=tr.want;$('#tReq').textContent=t('tReq',word);syncTornoFails();$('#pTorno').hidden=false;
   if(!tr.greeted){tr.greeted=true;caption(t('c_greet',word));AU.whisper();}}
+function syncTornoFails(){const el=$('#tFails');if(!el||!g)return;const n=g.tor.fails;el.textContent=t('tFails',n);el.classList.toggle('crit',n>=1);}
 function openLog(){if(!g||g.cams)return;const was=$('#pLog').hidden;closePanels();$('#pLog').hidden=!was;}
 function buildItems(){$('#tItems').innerHTML=ITEMS.map(it=>`<button class="item" data-id="${it.id}"><svg viewBox="0 0 64 64" aria-hidden="true">${ICON_SVG[it.id]}</svg>${t('item_'+it.id)}</button>`).join('');
   $('#tItems').querySelectorAll('.item').forEach(b=>b.addEventListener('click',()=>serve(b.dataset.id)));}
