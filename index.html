@@ -252,6 +252,10 @@ kbd{font-family:var(--f-hud);font-size:20px;padding:0 6px;border:1px solid rgba(
 .rdl{position:absolute;width:76px;height:76px;border-radius:50%;pointer-events:auto;background:transparent!important;border:0!important;cursor:crosshair}
 #stage.stun #cv,#stage.stun #officeUI{filter:blur(7px) saturate(.55) brightness(.85);transition:filter .25s}
 .card td{padding:4px 4px!important}
+.sl{white-space:nowrap;font-size:19px!important}
+#bCustom{display:block;width:100%;margin-top:16px;font-size:24px!important;padding:12px 16px!important;background:rgba(240,166,58,.2)!important}
+#bCustom:hover{background:rgba(240,166,58,.34)!important}
+.note .lv{font-family:var(--f-hud);font-size:21px;letter-spacing:.03em;border-top:1px solid #a8977a;padding-top:8px}
 #dev{position:absolute;top:8px;right:8px;z-index:60;width:390px;max-width:calc(100% - 16px);max-height:calc(100% - 16px);overflow-y:auto;box-sizing:border-box;padding:10px 12px;background:rgba(6,10,8,.95);border:1px solid #3f6;border-radius:6px;color:#bfffcf;font:16px/1.25 VT323,ui-monospace,monospace;box-shadow:0 10px 40px rgba(0,0,0,.7)}
 #dev .dvH{display:flex;justify-content:space-between;align-items:center;font-size:20px;letter-spacing:.15em;color:#6f6}
 #dev button{font:inherit;font-size:15px;letter-spacing:.05em;color:#dfffe6;background:#12261a;border:1px solid #2d6b40;border-radius:3px;padding:3px 7px;cursor:pointer}
@@ -416,6 +420,7 @@ kbd{font-family:var(--f-hud);font-size:20px;padding:0 6px;border:1px solid rgba(
         <div>
           <div class="scrHead" style="margin-bottom:12px"><p data-th="customIntro"></p></div>
           <div class="sliders" id="sliders"></div>
+          <button class="btn" id="bCustom" data-t="beginCustom"></button>
         </div>
         <div class="presets" id="presets"></div>
       </div>
@@ -651,7 +656,7 @@ TX.en={
  nightLabel:n=>`Night ${n}`,customNight:'Custom night',nightSubs:()=>['First shift','Quicker steps',`${names.angel} arrives`,'The choir turns','Last entry'],
  kept:b=>`KEPT · ${b}/10`,notKept:'NOT YET KEPT',
  sliders:()=>({founder:names.founder.toUpperCase(),examiner:names.examiner.toUpperCase(),choir:'CHOIR',torno:'TORNO',prefect:names.prefect.toUpperCase(),angel:names.angel.toUpperCase()}),
- presets:['Gentle shift','Exam week','Lauds never comes'],beginCustom:'BEGIN CUSTOM NIGHT',
+ presets:['Gentle shift','Exam week','Lauds never comes'],beginCustom:'▶ PLAY CUSTOM NIGHT WITH THESE LEVELS',customLevels:'Tonight\'s levels:',
  fTitle:'The faculty',lblF:"FOUNDER'S NAME",lblE:"EXAMINER'S NAME",lblS:"PREFECT'S NAME",lblP:'YOUR NAME',
  fac:()=>[
   {k:'founder',role:'The Founder',where:"FOUNDER'S HALL · CAM 1A · LEFT DOOR",bio:'Opened the school in 1958 and signed every diploma by hand. His portrait has hung in the main hall ever since, except at night.',how:'When the frame on CAM 1A is empty he is walking the left wing. Hold the left light; if he is in the doorway, close the door. Portraits do not move while watched.'},
@@ -806,7 +811,7 @@ TX.es={
  nightLabel:n=>`Noche ${n}`,customNight:'Noche personalizada',nightSubs:()=>['Primer turno','Pasos más rápidos',`Llega ${names.angel}`,'El coro se gira','Última entrada'],
  kept:b=>`SUPERADA · ${b}/10`,notKept:'SIN SUPERAR',
  sliders:()=>({founder:names.founder.toUpperCase(),examiner:names.examiner.toUpperCase(),choir:'CORO',torno:'TORNO',prefect:names.prefect.toUpperCase(),angel:names.angel.toUpperCase()}),
- presets:['Turno tranquilo','Semana de exámenes','Laudes nunca llega'],beginCustom:'EMPEZAR NOCHE PERSONALIZADA',
+ presets:['Turno tranquilo','Semana de exámenes','Laudes nunca llega'],beginCustom:'▶ JUGAR LA NOCHE PERSONALIZADA CON ESTOS NIVELES',customLevels:'Niveles de esta noche:',
  fTitle:'El profesorado',lblF:'NOMBRE DEL FUNDADOR',lblE:'NOMBRE DE LA EXAMINADORA',lblS:'NOMBRE DE LA PREFECTA',lblP:'TU NOMBRE',
  fac:()=>[
   {k:'founder',role:'El Fundador',where:'SALA DEL FUNDADOR · CAM 1A · PUERTA IZQUIERDA',bio:'Abrió el colegio en 1958 y firmó cada diploma a mano. Su retrato cuelga en la sala principal desde entonces, salvo por la noche.',how:'Cuando el marco de la CAM 1A está vacío, recorre el ala izquierda. Mantén la luz izquierda y, si está en la puerta, ciérrala. Los retratos no se mueven mientras alguien los mira.'},
@@ -1668,7 +1673,8 @@ function applyLang(){
 }
 let pendingCustom=null;
 function intro(n,custom){AU.startMenu();pendingCustom=custom||null;lastNight=n;mode='intro';showScreen('sIntro');$('#inNight').textContent=n==='C'?t('customNight'):t('nightLabel',n);
-  $('#note').innerHTML=`<div class="nh">${t('noteHead',n)}</div>`+t('notes')[n]();$('#note').scrollTop=0;}
+  const lv=n==='C'&&custom?(()=>{const lab=t('sliders');return `<p class="lv">${t('customLevels')}<br>${SL_KEYS.map(k=>`${lab[k]} <b>${custom[k]??0}</b>`).join(' · ')}</p>`;})():'';
+  $('#note').innerHTML=`<div class="nh">${t('noteHead',n)}</div>`+t('notes')[n]()+lv;$('#note').scrollTop=0;}
 const SL_KEYS=['founder','examiner','choir','torno','prefect','angel'];
 const PRESETS=[[2,2,2,2,0,0],[6,20,4,4,6,6],[20,20,20,20,20,20]];
 let customCfg=Object.assign({founder:10,examiner:10,choir:10,torno:10,prefect:10,angel:10},store.get('custom',{}));
@@ -1680,9 +1686,8 @@ function buildNights(){
   $('#sliders').innerHTML=SL_KEYS.map(k=>`<label class="sl" for="sl_${k}">${lab[k]}<output id="o_${k}">${customCfg[k]}</output><input type="range" id="sl_${k}" min="0" max="20" value="${customCfg[k]}"></label>`).join('');
   SL_KEYS.forEach(k=>$('#sl_'+k).addEventListener('input',e=>{customCfg[k]=+e.target.value;$('#o_'+k).textContent=e.target.value;store.set('custom',customCfg);}));
   const names_=t('presets');
-  $('#presets').innerHTML=PRESETS.map((v,i)=>`<button data-i="${i}">${names_[i]} · ${v.join('/')}</button>`).join('')+`<button class="btn" id="bCustom" style="text-align:center">${t('beginCustom')}</button>`;
+  $('#presets').innerHTML=PRESETS.map((v,i)=>`<button data-i="${i}">${names_[i]} · ${v.join('/')}</button>`).join('');
   $('#presets').querySelectorAll('[data-i]').forEach(b=>b.addEventListener('click',()=>{const v=PRESETS[+b.dataset.i];SL_KEYS.forEach((k,i)=>{customCfg[k]=v[i];$('#sl_'+k).value=v[i];$('#o_'+k).textContent=v[i];});store.set('custom',customCfg);}));
-  $('#bCustom').addEventListener('click',()=>intro('C',Object.assign({},customCfg)));
 }
 const NAME_INPUTS=[['#nmF','founder'],['#nmE','examiner'],['#nmS','prefect'],['#nmP','player']];
 function facNames(){t('fac').forEach(cd=>{const el=$('#fn_'+cd.k);if(el)el.textContent=cd.name||names[cd.k];});}
@@ -1738,7 +1743,7 @@ function wire(){
   $('#bQuit').addEventListener('click',()=>{if(AU.c)AU.c.resume();toTitle();});
   $('#lgEs').addEventListener('click',()=>{AU.init();setLang('es');afterLang();});
   $('#lgEn').addEventListener('click',()=>{AU.init();setLang('en');afterLang();});
-  $('#bNews').addEventListener('click',toTitle);$('#mNews').addEventListener('click',showNews);
+  $('#bNews').addEventListener('click',toTitle);$('#bCustom').addEventListener('click',()=>intro('C',Object.assign({},customCfg)));$('#mNews').addEventListener('click',showNews);
   $('#mLang').addEventListener('click',showLang);
   $('#mBegin').addEventListener('click',()=>{AU.init();intro(curNight()||(progress.done.length>=5?5:nextNight()));});
   $('#mNights').addEventListener('click',()=>{AU.init();buildNights();showScreen('sNights');});
