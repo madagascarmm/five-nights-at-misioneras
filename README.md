@@ -23,22 +23,6 @@ Un juego de terror de turno de noche ambientado en un colegio de monjas, hecho p
 - **Velas:** en la CAM 2B, toca las velas apagadas para encenderlas. Si se apagan las cinco, el coro viene a por ti.
 - **Torno:** cuando llamen, devuelve el objeto que te pidan en latín. El libro de portería de la mesa tiene las palabras.
 
-## J. Angel (desde la noche 3)
-
-- Cuando grite **«HAZ UNA LETRITA»**, todos los demás se congelan hasta que escribas su palabra. Las palabras salen del glosario de Empresa e Iniciativa Emprendedora, de la A a la Z. Si no llegas a tiempo, te deja aturdida 6 segundos y los demás suben dos puntos de agresividad.
-- Si dice **«Freerider»**, manda a su águila: abre las cámaras y pulsa las 8 dianas antes de que se acabe el tiempo.
-
-## Cómo añadir novedades
-
-El registro de novedades que aparece al empezar el juego está en el archivo [`novedades.md`](novedades.md). Para añadir una:
-
-1. Abre `novedades.md` en GitHub y pulsa el lápiz (Editar).
-2. Escribe una entrada nueva arriba del todo, empezando con `## ` y el título, por ejemplo `## v1.5 · 20 de octubre de 2026`.
-3. Pon cada cambio en su propia línea empezando por `- `.
-4. Pulsa **Commit changes**.
-
-En uno o dos minutos la web se actualiza. Los jugadores verán el registro la próxima vez que abran el juego, porque la primera entrada es nueva para ellos.
-
 ## Partidas guardadas
 
 El juego guarda el progreso de cada jugador en su navegador: noches superadas, mejores notas, nombres, idioma y la configuración de la noche personalizada. Se guarda en ese dispositivo y ese navegador, así que no pasa de un ordenador a otro.
