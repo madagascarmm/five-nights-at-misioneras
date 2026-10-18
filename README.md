@@ -2,7 +2,7 @@
 
 Un juego de terror de turno de noche ambientado en un colegio de monjas, hecho para un proyecto del colegio. Sobrevive de las 12 AM a las 6 AM en la portería del Colegio Misioneras: cierra las puertas a quien toca, da cuerda al reloj de la torre, corrige los exámenes, mantén encendidas las velas de la capilla y atiende el torno.
 
-**Jugar:** https://madagascarmm.github.io/five-nights-at-misioneras/
+**Jugar:** https://madagascarmm.github. io/five-nights-at-misioneras/
 
 ## Controles
 
