@@ -232,8 +232,8 @@ kbd{font-family:var(--f-hud);font-size:20px;padding:0 6px;border:1px solid rgba(
 @media (prefers-reduced-motion: reduce){ .crit,#camRec,#hotTorno.req,#sixam .six{animation:none} .panel{animation:none} }
 
 .fCard canvas{height:118px!important}
-.fac{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:10px!important}
-.sliders{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:12px!important}
+.fac{grid-template-columns:repeat(var(--n,6),minmax(0,1fr))!important;gap:10px!important}
+.sliders{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:10px!important}
 #angelUI{position:absolute;inset:0;z-index:16;display:grid;justify-items:center;align-content:space-between;padding-block:34px 92px;background:radial-gradient(ellipse at 50% 45%,rgba(120,0,0,.12),rgba(40,0,0,.6))}
 #angelShout{font-family:var(--f-display);font-size:124px;line-height:1;white-space:nowrap;color:#ff2020;text-align:center;text-shadow:0 0 30px rgba(255,0,0,.75),0 6px 0 #400,0 0 4px #000}
 #angelUI.go #angelShout{animation:shout .55s cubic-bezier(.2,1.6,.4,1) both}
@@ -252,6 +252,12 @@ kbd{font-family:var(--f-hud);font-size:20px;padding:0 6px;border:1px solid rgba(
 .rdl{position:absolute;width:76px;height:76px;border-radius:50%;pointer-events:auto;background:transparent!important;border:0!important;cursor:crosshair}
 #stage.stun #cv,#stage.stun #officeUI{filter:blur(7px) saturate(.55) brightness(.85);transition:filter .25s}
 .card td{padding:4px 4px!important}
+#sCrash{display:grid;place-items:center;background:#000;cursor:default}
+.crashBox{max-width:820px;font-family:'Courier New',ui-monospace,monospace;text-align:left}
+.crashBox p{margin:0}
+.cr1{font-size:28px;color:#d4d4d4}
+.cr2{font-size:22px;color:#e9ddc2;margin-top:22px!important}
+.cr3{font-size:16px;color:#6d6d6d;margin-top:34px!important}
 .sl{white-space:nowrap;font-size:19px!important}
 #bCustom{display:block;width:100%;margin-top:16px;font-size:24px!important;padding:12px 16px!important;background:rgba(240,166,58,.2)!important}
 #bCustom:hover{background:rgba(240,166,58,.34)!important}
@@ -503,6 +509,10 @@ kbd{font-family:var(--f-hud);font-size:20px;padding:0 6px;border:1px solid rgba(
     <div class="btns"><button class="btn" id="bEndCustom" data-t="bEndCustom"></button><button class="btn ghost" id="bEndTitle" data-t="titleBtn"></button></div>
   </section>
 
+  <section id="sCrash" class="screen" hidden>
+    <div class="crashBox"><p class="cr1" id="crash1"></p><p class="cr2" id="crash2"></p><p class="cr3" id="crash3"></p></div>
+  </section>
+
   <section id="sPause" class="screen" hidden>
     <div class="box"><h2 data-t="paused"></h2>
       <div class="btns"><button class="btn" id="bResume" data-t="resume"></button><button class="btn ghost" id="bRestart" data-t="restart"></button><button class="btn ghost" id="bQuit" data-t="quit"></button></div>
@@ -655,7 +665,7 @@ TX.en={
  customIntro:'<b style="color:var(--vellum)">Custom night.</b> Set how restless each of them is, from 0 (stays put) to 20.',
  nightLabel:n=>`Night ${n}`,customNight:'Custom night',nightSubs:()=>['First shift','Quicker steps',`${names.angel} arrives`,'The choir turns','Last entry'],
  kept:b=>`KEPT · ${b}/10`,notKept:'NOT YET KEPT',
- sliders:()=>({founder:names.founder.toUpperCase(),examiner:names.examiner.toUpperCase(),choir:'CHOIR',torno:'TORNO',prefect:names.prefect.toUpperCase(),angel:names.angel.toUpperCase()}),
+ sliders:()=>({founder:names.founder.toUpperCase(),examiner:names.examiner.toUpperCase(),choir:'CHOIR',torno:'TORNO',prefect:names.prefect.toUpperCase(),angel:names.angel.toUpperCase(),goat:'GOAT'}),
  presets:['Gentle shift','Exam week','Lauds never comes'],beginCustom:'▶ PLAY CUSTOM NIGHT WITH THESE LEVELS',customLevels:'Tonight\'s levels:',
  fTitle:'The faculty',lblF:"FOUNDER'S NAME",lblE:"EXAMINER'S NAME",lblS:"PREFECT'S NAME",lblP:'YOUR NAME',
  fac:()=>[
@@ -664,7 +674,8 @@ TX.en={
   {k:'choir',name:'The Choir',where:'CHAPEL · CAM 2B',bio:'Three choir girls rehearsing the same Christmas carol since the power failed in 1963.',how:'They face the altar while the votive candles burn. Relight dark candles on CAM 2B. If all five go out, relight two before they arrive.'},
   {k:'torno',name:'Sister of the Torno',where:'BEHIND THE TORNO',bio:'No one on staff has seen more of her than one pale hand. She asks for things in Latin, politely, once.',how:'When she knocks, open the torno and send back exactly what she names. One wrong item leaves you four seconds. A second one is fatal.'},
   {k:'prefect',role:'The Prefect',where:'ANY CAMERA · THE DARK',bio:'Keeps discipline in the corridors and believes the night should be silent, including your cameras.',how:'If he is on the camera you are watching, switch away fast or he cuts the feed. If the generator dies, he comes with a candle.'},
-  {k:'angel',role:'Keeper of the eagle',where:'THE LODGE · FROM NIGHT 3',bio:'Teaches in a hurry and never repeats anything. Brings his pet eagle to work.',how:'When he shouts HAZ UNA LETRITA, type his word before the timer runs out, or you are stunned for 6 seconds and everyone else gets faster. Sometimes he sends his eagle instead: click the 8 roundels on the cameras.'}],
+  {k:'angel',role:'Keeper of the eagle',where:'THE LODGE · FROM NIGHT 3',bio:'Teaches in a hurry and never repeats anything. Brings his pet eagle to work.',how:'When he shouts HAZ UNA LETRITA, type his word before the timer runs out, or you are stunned for 6 seconds and everyone else gets faster. Sometimes he sends his eagle instead: click the 8 roundels on the cameras.'},
+  ...(progress.goatSeen?[{k:'goat',name:'The Ghost Goat',role:'Rare event',where:'ANY CAMERA · THE LODGE',bio:'It was the goat from the sisters\' vegetable garden. Since 1971 it appears in a nun\'s veil, very rarely.',how:'If you see it on a camera, stop looking. If it then appears sitting in the lodge, raise the cameras again right away or it will eat the night.'}]:[])],
  hTitle:'How to survive',
  helpBody:()=>`<div><h3>CONTROLS</h3><table>
 <tr><td>DOOR</td><td>Tap, or <kbd>Q</kbd> left and <kbd>E</kbd> right. A closed door drains the generator.</td></tr>
@@ -705,6 +716,7 @@ TX.en={
  4:()=>`<p>About the girls in the chapel.</p>
 <p>Christmas, 1963. The power failed during the last choir rehearsal. The votive candles went out one by one, and when the sisters came in with lamps, the stalls were empty. Three girls are still waiting to finish their carol.</p>
 <p>While the candles burn, they face the altar. As the light goes, they turn toward the camera. When the last candle goes out, they stop singing and come looking for an audience. Relight two candles and they will go back.</p>
+<p><i>P.S. If you ever see a goat in a veil on the cameras, stop looking at it. And if you later find it sitting in the lodge, don't just sit there: raise the cameras.</i></p>
 <p class="sig">S. R.</p>`,
  5:()=>`<p>This is my last entry. I took this post in 1971 and I have not left the building since. Nobody leaves Misioneras. You wind the clock, you grade the exams, you keep the candles lit, and one morning you notice your own portrait already hanging in the hall.</p>
 <p>Reach six o'clock tonight and ${names.founder} will sign your diploma. After that, the lodge is yours.</p>
@@ -783,7 +795,7 @@ TX.en={
   ['Maths','Half of 150?','75',['70','65','80']],
   ['Maths','10% of 300?','30',['3','300','13']]],
  cv_clock:'TOWER CLOCK',cv_tt:'TIMETABLE',cv_ttRows:['Compline  21:00','Matins  00:00','Lauds  06:00'],cv_book:"PORTER'S LOGBOOK",
- cv_plate:'FOUNDER · 1958',cv_board1:'Exams',cv_board2:'Due: 6:00',cv_alms:'ALMS',
+ cv_plate:'FOUNDER · 1958',cv_board1:'Exams',cv_board2:'Due: 6:00',cv_alms:'ALMS',crash1:'Five Nights at Misioneras has stopped working.',crash2:'The Ghost Goat ate the night.',crash3:'Returning to the title…',
  def_angel:'J. Angel',angelHint:'TYPE THE WORD BEFORE TIME RUNS OUT',angelTap:'Tap here to type',aRoundel:'Roundel',
  c_angelOk:()=>`«Muy bien.» ${names.angel} leaves the lodge.`,c_angelFail:'Too slow. You are stunned, and everyone else is moving faster.',
  c_eagle:()=>`${names.angel}: «Freerider.» Find the 8 roundels on the cameras!`,c_eagleGone:'The eagle flies back to its master.',
@@ -810,7 +822,7 @@ TX.es={
  customIntro:'<b style="color:var(--vellum)">Noche personalizada.</b> Elige lo inquieto que está cada uno, de 0 (no se mueve) a 20.',
  nightLabel:n=>`Noche ${n}`,customNight:'Noche personalizada',nightSubs:()=>['Primer turno','Pasos más rápidos',`Llega ${names.angel}`,'El coro se gira','Última entrada'],
  kept:b=>`SUPERADA · ${b}/10`,notKept:'SIN SUPERAR',
- sliders:()=>({founder:names.founder.toUpperCase(),examiner:names.examiner.toUpperCase(),choir:'CORO',torno:'TORNO',prefect:names.prefect.toUpperCase(),angel:names.angel.toUpperCase()}),
+ sliders:()=>({founder:names.founder.toUpperCase(),examiner:names.examiner.toUpperCase(),choir:'CORO',torno:'TORNO',prefect:names.prefect.toUpperCase(),angel:names.angel.toUpperCase(),goat:'CABRA'}),
  presets:['Turno tranquilo','Semana de exámenes','Laudes nunca llega'],beginCustom:'▶ JUGAR LA NOCHE PERSONALIZADA CON ESTOS NIVELES',customLevels:'Niveles de esta noche:',
  fTitle:'El profesorado',lblF:'NOMBRE DEL FUNDADOR',lblE:'NOMBRE DE LA EXAMINADORA',lblS:'NOMBRE DEL PREFECTO',lblP:'TU NOMBRE',
  fac:()=>[
@@ -819,7 +831,8 @@ TX.es={
   {k:'choir',name:'El Coro',where:'CAPILLA · CAM 2B',bio:'Tres niñas del coro que ensayan el mismo villancico desde el apagón de 1963.',how:'Miran al altar mientras las velas ardan. Enciende las velas apagadas en la CAM 2B. Si se apagan las cinco, enciende dos antes de que lleguen.'},
   {k:'torno',name:'La Hermana del Torno',where:'DETRÁS DEL TORNO',bio:'Nadie del personal ha visto de ella más que una mano pálida. Pide las cosas en latín, con educación, una sola vez.',how:'Cuando llame, abre el torno y devuelve exactamente lo que nombre. Con un fallo te quedan cuatro segundos. El segundo fallo es mortal.'},
   {k:'prefect',role:'El Prefecto',where:'CUALQUIER CÁMARA · LA OSCURIDAD',bio:'Mantiene la disciplina en los pasillos y cree que la noche debe ser silenciosa, cámaras incluidas.',how:'Si aparece en la cámara que estás mirando, cambia rápido o cortará la señal. Si el generador se apaga, vendrá con una vela.'},
-  {k:'angel',role:'El dueño del águila',where:'LA PORTERÍA · DESDE LA NOCHE 3',bio:'Da clase con prisas y nunca repite nada. Se trae su águila al trabajo.',how:'Cuando grite HAZ UNA LETRITA, escribe su palabra antes de que acabe el tiempo o quedarás aturdida 6 segundos y los demás se acelerarán. A veces manda a su águila: pulsa las 8 dianas en las cámaras.'}],
+  {k:'angel',role:'El dueño del águila',where:'LA PORTERÍA · DESDE LA NOCHE 3',bio:'Da clase con prisas y nunca repite nada. Se trae su águila al trabajo.',how:'Cuando grite HAZ UNA LETRITA, escribe su palabra antes de que acabe el tiempo o quedarás aturdida 6 segundos y los demás se acelerarán. A veces manda a su águila: pulsa las 8 dianas en las cámaras.'},
+  ...(progress.goatSeen?[{k:'goat',name:'La Cabra Fantasma',role:'Evento raro',where:'CUALQUIER CÁMARA · LA PORTERÍA',bio:'Era la cabra del huerto de las hermanas. Desde 1971 se aparece con toca de monja, muy de vez en cuando.',how:'Si la ves en una cámara, deja de mirarla. Si luego aparece sentada en la portería, vuelve a subir las cámaras enseguida o se comerá la noche.'}]:[])],
  hTitle:'Cómo sobrevivir',
  helpBody:()=>`<div><h3>CONTROLES</h3><table>
 <tr><td>PUERTA</td><td>Toca, o <kbd>Q</kbd> izquierda y <kbd>E</kbd> derecha. Una puerta cerrada gasta generador.</td></tr>
@@ -860,6 +873,7 @@ TX.es={
  4:()=>`<p>Sobre las niñas de la capilla.</p>
 <p>Navidad de 1963. Se fue la luz durante el último ensayo del coro. Las velas votivas se apagaron una a una, y cuando las hermanas entraron con lámparas, los bancos estaban vacíos. Tres niñas siguen esperando para terminar su villancico.</p>
 <p>Mientras las velas ardan, miran al altar. Cuando la luz se va, se giran hacia la cámara. Cuando se apaga la última vela, dejan de cantar y salen a buscar público. Enciende dos velas y volverán a su sitio.</p>
+<p><i>P. D.: Si alguna vez ves una cabra con toca en las cámaras, deja de mirarla. Y si después la encuentras sentada en la portería, no te quedes quieta: sube las cámaras.</i></p>
 <p class="sig">S. R.</p>`,
  5:()=>`<p>Esta es mi última entrada. Ocupé este puesto en 1971 y no he salido del edificio desde entonces. Nadie se va de Misioneras. Das cuerda al reloj, corriges los exámenes, mantienes las velas encendidas, y una mañana te das cuenta de que tu propio retrato ya cuelga en la sala.</p>
 <p>Llega a las seis esta noche y ${names.founder} firmará tu diploma. Después, la portería será tuya.</p>
@@ -938,7 +952,7 @@ TX.es={
   ['Matemáticas','¿Cuál es la mitad de 150?','75',['70','65','80']],
   ['Matemáticas','¿El 10 % de 300?','30',['3','300','13']]],
  cv_clock:'RELOJ DE TORRE',cv_tt:'HORARIO',cv_ttRows:['Completas  21:00','Maitines  00:00','Laudes  06:00'],cv_book:'LIBRO DE PORTERÍA',
- cv_plate:'FUNDADOR · 1958',cv_board1:'Exámenes',cv_board2:'Entrega: 6:00',cv_alms:'LIMOSNA',
+ cv_plate:'FUNDADOR · 1958',cv_board1:'Exámenes',cv_board2:'Entrega: 6:00',cv_alms:'LIMOSNA',crash1:'Five Nights at Misioneras ha dejado de funcionar.',crash2:'La Cabra Fantasma se ha comido la noche.',crash3:'Volviendo al título…',
  def_angel:'J. Angel',angelHint:'ESCRIBE LA PALABRA ANTES DE QUE SE ACABE EL TIEMPO',angelTap:'Toca aquí para escribir',aRoundel:'Diana',
  c_angelOk:()=>`«Muy bien.» ${names.angel} se va de la portería.`,c_angelFail:'Demasiado lenta. Estás aturdida y todos los demás se mueven más rápido.',
  c_eagle:()=>`${names.angel}: «Freerider.» ¡Busca las 8 dianas en las cámaras!`,c_eagleGone:'El águila vuelve con su dueño.',
@@ -1147,7 +1161,7 @@ function drawExamStack(c){
 function renderOffice(){
   const c=ctx;c.drawImage(OFF_BG,0,0);drawDoorway(c,'L');drawDoorway(c,'R');
   const tr=g.tor;drawTornoAt(c,640,252,446,80,tr.ang,{hand:tr.state==='req',urg:tr.state==='req'&&tr.timer<5,item:tr.item});
-  drawCrank(c);if(g&&g.A)drawAngelOffice(c);c.drawImage(OFF_FG,0,0);drawExamStack(c);
+  drawCrank(c);if(g&&g.A)drawAngelOffice(c);if(g&&g.goat)drawGoatOffice(c);c.drawImage(OFF_FG,0,0);drawExamStack(c);
   if(!g.out){const fl=Math.random()<.03?.12:.26;glow(c,935,585,190,'240,170,80',fl);glow(c,935,552,46,'255,220,140',.35);}
   c.drawImage(OFF_VIG,0,0);if(g&&g.eagle)drawEagleOffice(c);
   c.fillStyle=`rgba(0,0,0,${g.out?.94:(.06+(Math.random()<.02?.2:0))})`;c.fillRect(0,0,W,H);
@@ -1250,6 +1264,7 @@ function renderCamScene(c,id,st){
   if(st.P===id){const [x,y,h]=PREF_POS[id];drawPrefect(c,x,y,h,{eyes:.35,alpha:.92});}
   if(CAMFG[id])c.drawImage(CAMFG[id],0,0);
   if(id==='2B')drawCandles(c,st.candles);
+  if(g&&g.goat)drawGoatSign(c,id);
 }
 let frameN=0;
 function cctv(c,static_){
@@ -1263,11 +1278,11 @@ function cctv(c,static_){
 
 /* ---------- nights, lore, exams ---------- */
 const NIGHTS={
-  1:{founder:3,examiner:2,choir:3,torno:3,prefect:0,angel:0,exams:2,examEvery:40},
-  2:{founder:6,examiner:5,choir:6,torno:6,prefect:6,angel:0,exams:3,examEvery:34},
-  3:{founder:9,examiner:8,choir:8,torno:9,prefect:9,angel:6,exams:3,examEvery:30},
-  4:{founder:12,examiner:11,choir:11,torno:12,prefect:12,angel:10,exams:4,examEvery:26},
-  5:{founder:15,examiner:14,choir:14,torno:15,prefect:16,angel:14,exams:5,examEvery:22}
+  1:{founder:3,examiner:2,choir:3,torno:3,prefect:0,angel:0,goat:0,exams:2,examEvery:40},
+  2:{founder:6,examiner:5,choir:6,torno:6,prefect:6,angel:0,goat:3,exams:3,examEvery:34},
+  3:{founder:9,examiner:8,choir:8,torno:9,prefect:9,angel:6,goat:4,exams:3,examEvery:30},
+  4:{founder:12,examiner:11,choir:11,torno:12,prefect:12,angel:10,goat:5,exams:4,examEvery:26},
+  5:{founder:15,examiner:14,choir:14,torno:15,prefect:16,angel:14,goat:6,exams:5,examEvery:22}
 };
 const STUDENTS=['Inés M.','Lucía P.','Carmen R.','Pilar G.','Rocío T.','Mercedes A.','Elena S.','Sofía D.','Marta L.','Beatriz F.','Nuria C.','Teresa V.','Amparo B.','Consuelo H.'];
 const CLASSES=['1ºA','2ºB','3ºA','3ºB','4ºA','4ºC'];
@@ -1290,7 +1305,7 @@ function startNight(n,custom){
     candles:[1,1,1,1,1],seenCandles:null,choirT:null,choirCap:false,
     F:{pos:0,t:0,door:0,seen:false},E:{pos:0,t:0,door:0,seen:false},
     tor:{state:'idle',ang:Math.PI,target:Math.PI,want:null,timer:0,max:1,next:rand(22,38),item:null,spinT:0,greeted:false,fails:0},
-    P:{cam:null,left:0,gaze:0,next:8},A:{mode:null,t:0,max:1,next:rand(35,55),word:'',typed:''},stun:0,eagle:null,out:null,scare:null,cfgStart:n==='C'?Object.assign({},custom):null,
+    P:{cam:null,left:0,gaze:0,next:8},A:{mode:null,t:0,max:1,next:rand(35,55),word:'',typed:''},stun:0,eagle:null,goat:null,goatFlash:0,out:null,scare:null,cfgStart:n==='C'?Object.assign({},custom):null,
     st:{graded:0,mis:0,relit:0,torServed:0,torTotal:0,stops:0,wOk:0,wTot:0,eOk:0,eTot:0}};
   showScreen(null);$('#hud').hidden=false;$('#officeUI').hidden=false;$('#camUI').hidden=true;$('#camBar').hidden=false;
   closePanels();$('#camBar').textContent=t('camsUp');mode='play';AU.startLoops();syncHud(true);
@@ -1302,11 +1317,11 @@ function update(dt){
   if(G.spring<=0){G.spring=0;if(!G.clockStopped){G.clockStopped=true;G.st.stops++;AU.clunk();caption(t('c_clockStop'));}}
   else if(G.clockStopped&&G.spring>3){G.clockStopped=false;caption(t('c_clockGo'));}
   if(!G.clockStopped){G.t+=dt;G.tick+=dt;if(G.tick>=1){G.tick-=1;AU.tick(Math.floor(G.t)%2);}}
-  const hour=Math.min(6,Math.floor(G.t/HOUR));if(hour!==G.hour){G.hour=hour;if(hour===2||hour===4){for(const k of ['founder','examiner'])if(G.cfg[k]>0)G.cfg[k]=Math.min(20,G.cfg[k]+1);}}
+  const hour=Math.min(6,Math.floor(G.t/HOUR));if(hour!==G.hour){G.hour=hour;goatHourRoll();if(hour===2||hour===4){for(const k of ['founder','examiner'])if(G.cfg[k]>0)G.cfg[k]=Math.min(20,G.cfg[k]+1);}}
   if(G.t>=HOUR*6){win();return;}
   const frz=angelActive()||DEV.freeze;
   if(!G.out&&!frz){G.examT+=dt;if(G.examT>=G.examEvery){G.examT=0;G.exams++;AU.paper(-.1);}}
-  if(!G.out){if(!frz){updFounder(dt);updExaminer(dt);updChoir(dt);updTorno(dt);updPrefect(dt);}if(!DEV.freeze)updAngel(dt);}else updOut(dt);
+  if(!G.out){if(!frz){updFounder(dt);updExaminer(dt);updChoir(dt);updTorno(dt);updPrefect(dt);}if(!DEV.freeze){updAngel(dt);updGoat(dt);}}else updOut(dt);
   if(G.camOff>0)G.camOff-=dt;G.camSwitchT=Math.max(0,G.camSwitchT-dt);
   if(G.cams&&G.cam==='2B'&&G.camOff<=0)G.seenCandles={lit:G.candles.reduce((a,b)=>a+b,0),hour:G.hour};
   AU.set('buzz',(G.lightL||G.lightR)?.02:0);AU.set('stat',G.cams?.025:0);AU.set('choir',choirLevel());
@@ -1348,7 +1363,7 @@ function powerOut(){angelReset();g.power=0;g.out={t:0,appear:rand(5,10),kill:nul
   if(g.cams)setCams(false,true);closePanels();AU.stopLoops();AU.powerDown();AU.hum();$('#officeUI').hidden=true;$('#camBar').hidden=true;caption(t('c_genDies'));}
 function updOut(dt){const o=g.out;o.t+=dt;if(o.t>=o.appear&&o.kill==null){o.kill=o.t+rand(3.5,6);AU.steps(-.5,5);}if(o.kill!=null&&o.t>=o.kill)scare('prefect');}
 function scare(type,force){if(mode!=='play')return;if(DEV.god&&!force){devRepel(type);return;}devLog('death: '+type);angelReset();g.scare={type,t:0};mode='scare';closePanels();if(g.cams)setCams(false,true);
-  $('#hud').hidden=true;$('#officeUI').hidden=true;$('#camUI').hidden=true;$('#camBar').hidden=true;AU.stopLoops(true);AU.screech();if(type==='prefect')AU.shh();if(type==='eagle')AU.eagleCry(0);}
+  $('#hud').hidden=true;$('#officeUI').hidden=true;$('#camUI').hidden=true;$('#camBar').hidden=true;AU.stopLoops(true);AU.screech();if(type==='prefect')AU.shh();if(type==='eagle')AU.eagleCry(0);if(type==='goat'){AU.bleat(120,1.6,.5,1);AU.bleat(180,1.4,.35,1);}}
 function win(){angelReset();mode='win';AU.stopLoops();AU.bells();closePanels();$('#hud').hidden=true;$('#officeUI').hidden=true;$('#camUI').hidden=true;$('#camBar').hidden=true;
   if(g.night!=='C'){if(!progress.done.includes(g.night))progress.done.push(g.night);progress.current=null;}
   const r=reportCard();if(g.night!=='C'){const b=progress.best[g.night]||0;if(r.score>b)progress.best[g.night]=r.score;}saveProgress();
@@ -1382,6 +1397,8 @@ function renderScare(){
       if(t>1.1){const q=(t-1.1)/.5;const gr=c.createRadialGradient(W/2,H/2,Math.max(1,(1-q)*700),W/2,H/2,Math.max(2,(1-q)*700+200));gr.addColorStop(0,'rgba(0,0,0,0)');gr.addColorStop(1,'#000');c.fillStyle=gr;c.fillRect(0,0,W,H);}}
     tint(c,'#ffd0b0',.8);}
   if(s.type==='prefect'){if(t<.6){glow(c,W/2,H*.6,40+t*500,'255,170,80',.7);}else{const z=1.1+Math.min(t-.6,1)*.6;bigFace(c,P.upper,P.eyes,z,dx,dy,.32);glow(c,W/2+200,H*.8,300,'255,170,80',.4);tint(c,'#ff8a60',1);}}
+  if(s.type==='goat'&&t>.05){const z=1+Math.min(t,1.2)*1.1;drawGoatHead(c,W/2+dx,H/2+40+dy,H*.62*z,{eyes:1});tint(c,'#ffd27a',.6);
+    for(let i=0;i<7;i++){const y=rand(0,H),h=rand(8,46);try{c.drawImage(cv,0,y,W,h,rand(-70,70),y,W,h);}catch(e){}}}
   if(s.type==='eagle'&&t>.05&&ANG.eagle){const z=.4+Math.min(t,1.1)*2.4,ew=ANG.eagle.width*z,eh=ANG.eagle.height*z;glow(c,W/2,H/2,520,'255,40,40',.5);c.drawImage(ANG.eagle,W/2-ew/2+dx,H/2-eh/2+dy,ew,eh);tint(c,'#ff7060',.5);}
   if(t>.08&&t<.14){c.fillStyle='rgba(255,255,255,.65)';c.fillRect(0,0,W,H);}
   c.globalAlpha=.22;c.imageSmoothingEnabled=false;c.drawImage(NOISE[frameN%4],0,0,W,H);c.imageSmoothingEnabled=true;c.globalAlpha=1;c.drawImage(SCAN,0,0);
@@ -1399,7 +1416,7 @@ function drawDeathArt(type){
   else if(type==='prefect'){c.fillStyle='#000';c.fillRect(0,0,w,h);drawPrefect(c,280,30,300,{candle:true,eyes:.6});}
   c.textAlign='left';
 }
-function showDeath(type){mode='dead';showScreen('sDead');const d=t('deaths')[type];$('#dTitle').textContent=d.title;$('#dBody').textContent=d.body();$('#dTip').textContent=d.tip;
+function showDeath(type){if(type==='goat'){showCrash();return;}mode='dead';showScreen('sDead');const d=t('deaths')[type];$('#dTitle').textContent=d.title;$('#dBody').textContent=d.body();$('#dTip').textContent=d.tip;
   const ex=type==='examiner';$('#deadArt').hidden=ex;$('#deadExam').hidden=!ex;
   if(ex){$('#deName').textContent=names.player;$('#deNight').textContent=g.night==='C'?t('customNight'):t('nightLabel',g.night);$('#deSee').textContent=t('deSee',names.examiner);}else drawDeathArt(type);
   $('#bRetry').textContent=g.night==='C'?t('retryC'):t('retry',g.night);}
@@ -1516,7 +1533,7 @@ function updAngel(dt){const A=g.A,ai=g.cfg.angel||0;
   if(A.mode==='leave'){A.t-=dt;if(A.t<=0)A.mode=null;return;}
   if(A.mode==='send'){A.t-=dt;if(A.t<=0){A.mode=null;launchEagle();}return;}
   if(g.eagle){updEagle(dt);return;}
-  if(ai<=0||g.stun>0)return;
+  if(ai<=0||g.stun>0||(g.goat&&g.goat.phase!=='sign'))return;
   A.next-=dt;if(A.next>0)return;A.next=8;
   if(ri(1,20)>ai)return;
   if(Math.random()<.5)startTyping();else startSend();
@@ -1540,7 +1557,7 @@ function updEagle(dt){const e=g.eagle;e.t-=dt;e.flap-=dt;e.cry-=dt;
   if(e.rs.every(r=>r.hit)){g.eagle=null;g.st.eOk++;AU.eagleGone();caption(t('c_eagleGone'));angelCooldown();syncRoundels();return;}
   if(e.t<=0){g.eagle=null;syncRoundels();scare('eagle');}}
 function hitRoundel(i){if(!g||!g.eagle||!g.cams||g.camOff>0||mode!=='play')return;const r=g.eagle.rs[i];if(!r||r.hit||r.cam!==g.cam)return;r.hit=true;AU.pop();syncRoundels();}
-function angelReset(){if(g){if(g.A)g.A.mode=null;g.eagle=null;}showAngelUI(false);$('#eagleHud').hidden=true;$('#stage').classList.remove('stun');syncRoundels();}
+function angelReset(){if(g){if(g.A)g.A.mode=null;g.eagle=null;g.goat=null;g.goatFlash=0;}showAngelUI(false);$('#eagleHud').hidden=true;$('#stage').classList.remove('stun');syncRoundels();}
 
 /* UI */
 function showAngelUI(on){const el=$('#angelUI');el.hidden=!on;
@@ -1578,6 +1595,62 @@ function drawAngelOverlay(c){const A=g&&g.A;if(!A||A.mode!=='send'||!ANG.upper)r
   c.save();c.font='130px "Pirata One", Georgia, serif';c.textAlign='center';c.fillStyle='#ff2a2a';c.shadowColor='#000';c.shadowBlur=24;c.globalAlpha=Math.min(1,p*4);
   c.fillText('FREERIDER',W/2-140,H/2+60);c.restore();}
 
+/* ---------- La Cabra Fantasma: rare event, in the spirit of Golden Freddy ---------- */
+const GOAT_POS={'1B':[300,300,95],'1C':[860,250,110],'2A':[560,262,78],'2C':[640,300,64]};
+function drawGoatHead(c,x,y,s,o={}){c.save();c.translate(x,y);c.rotate(o.tilt||0);c.scale(s,s);c.globalAlpha=o.alpha??1;
+  c.fillStyle='#0b0a0d';c.beginPath();c.moveTo(-.62,.78);c.bezierCurveTo(-.72,-.2,-.5,-.8,0,-.82);c.bezierCurveTo(.5,-.8,.72,-.2,.62,.78);c.closePath();c.fill();
+  c.lineCap='round';c.strokeStyle='#cbbf9c';
+  for(const d of [-1,1]){c.lineWidth=.11;c.beginPath();c.moveTo(d*.16,-.42);c.bezierCurveTo(d*.3,-.98,d*.8,-.98,d*.72,-.45);c.stroke();c.lineWidth=.06;c.beginPath();c.moveTo(d*.69,-.56);c.lineTo(d*.74,-.36);c.stroke();}
+  c.fillStyle='#d9d1bb';for(const d of [-1,1]){c.save();c.translate(d*.37,-.2);c.rotate(d*.5);c.beginPath();c.ellipse(0,0,.23,.07,0,0,7);c.fill();c.restore();}
+  const fg=c.createLinearGradient(0,-.5,0,.5);fg.addColorStop(0,'#efe9d6');fg.addColorStop(1,'#b5ab92');c.fillStyle=fg;
+  c.beginPath();c.moveTo(0,-.5);c.bezierCurveTo(.2,-.5,.31,-.4,.29,-.18);c.bezierCurveTo(.27,.08,.2,.3,.15,.43);c.quadraticCurveTo(0,.56,-.15,.43);
+  c.bezierCurveTo(-.2,.3,-.27,.08,-.29,-.18);c.bezierCurveTo(-.31,-.4,-.2,-.5,0,-.5);c.fill();
+  c.fillStyle='#f3efe6';c.beginPath();c.moveTo(-.34,-.37);c.quadraticCurveTo(0,-.54,.34,-.37);c.lineTo(.31,-.27);c.quadraticCurveTo(0,-.43,-.31,-.27);c.closePath();c.fill();
+  c.fillStyle='#050404';for(const d of [-1,1]){c.beginPath();c.ellipse(d*.15,-.13,.088,.062,d*.2,0,7);c.fill();}
+  const e=o.eyes??.8;if(e>0){for(const d of [-1,1])glow(c,d*.15,-.13,.22,'255,200,110',e*.55);c.fillStyle=`rgba(255,220,140,${e})`;for(const d of [-1,1])c.fillRect(d*.15-.055,-.14,.11,.02);}
+  c.fillStyle='#3a332a';for(const d of [-1,1]){c.beginPath();c.ellipse(d*.06,.36,.026,.016,0,0,7);c.fill();}
+  c.strokeStyle='#5a5142';c.lineWidth=.016;c.beginPath();c.moveTo(-.07,.44);c.quadraticCurveTo(0,.47,.07,.44);c.stroke();
+  c.fillStyle='#d8d0bb';c.beginPath();c.moveTo(-.08,.48);c.lineTo(0,.8);c.lineTo(.08,.48);c.closePath();c.fill();
+  c.restore();}
+
+/* sounds */
+AU.bleat=(f,d,gn,bus)=>{if(!AU.c)return;const c=AU.c,t=c.currentTime,o=c.createOscillator(),o2=c.createOscillator(),lfo=c.createOscillator(),lg=c.createGain(),bp=c.createBiquadFilter(),g2=c.createGain();
+  o.type='sawtooth';o2.type='square';o.frequency.value=f;o2.frequency.value=f*1.006;lfo.frequency.value=7.5;lg.gain.value=f*.07;lfo.connect(lg);lg.connect(o.frequency);lg.connect(o2.frequency);
+  o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*.82,t+d);
+  bp.type='bandpass';bp.frequency.value=f*3.2;bp.Q.value=2.2;g2.gain.setValueAtTime(.0001,t);g2.gain.exponentialRampToValueAtTime(gn,t+.08);g2.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(bp);o2.connect(bp);bp.connect(g2);g2.connect(AU.dst(0,bus));[o,o2,lfo].forEach(n=>{n.start(t);n.stop(t+d+.05);});};
+AU.goatSwell=()=>{AU.tn({f:42,d:2.6,g:.35,a:.6});AU.tn({type:'sine',f:1870,f2:1500,d:2.4,g:.025,a:.8});AU.nz({type:'bandpass',f:400,q:.6,d:2.4,g:.08,a:1});};
+AU.goatGone=()=>{AU.nz({type:'highpass',f:1800,f2:400,d:.6,g:.08,a:.05});};
+AU.crashBuzz=()=>{AU.tn({type:'square',f:60,d:.45,g:.25,a:.002,bus:1});AU.tn({type:'square',f:1250,d:.12,g:.08,a:.002,bus:1});};
+
+/* logic */
+function goatLevel(){return g&&g.cfg?(g.cfg.goat||0):0;}
+function goatHourRoll(){if(!g||g.out||g.goat)return;const lv=goatLevel();if(lv<=0)return;
+  if(Math.random()<lv*.01)goatSign();else if(Math.random()<lv*.006){g.goatFlash=.18;AU.bleat(260,.35,.12);}}
+function goatSign(){if(!g||g.out)return;const cam=pick(Object.keys(GOAT_POS));g.goat={phase:'sign',cam,t:rand(15,24),seen:0};devLog('cabra: señal en CAM '+cam);}
+function goatReset(){if(g)g.goat=null;}
+function updGoat(dt){const G_=g.goat;if(g.goatFlash>0)g.goatFlash=Math.max(0,g.goatFlash-dt);if(!G_)return;
+  if(G_.phase==='sign'){G_.t-=dt;
+    if(g.cams&&g.cam===G_.cam&&g.camOff<=0){G_.seen+=dt;if(G_.seen>=1){G_.phase='marked';g.camSwitchT=.3;AU.bleat(150,1.6,.16);devLog('cabra: te ha marcado');}}
+    if(G_.phase==='sign'&&G_.t<=0)g.goat=null;return;}
+  if(G_.phase==='marked'){if(!g.cams&&!angelActive()&&!g.eagle){G_.phase='office';G_.t=2.2;AU.goatSwell();if(!progress.goatSeen){progress.goatSeen=true;saveProgress();buildFaculty();}}return;}
+  if(G_.phase==='office'){if(g.cams){g.goat=null;AU.goatGone();devLog('cabra: se ha ido');return;}G_.t-=dt;if(G_.t<=0){g.goat=null;scare('goat');}}}
+function showCrash(){mode='crash';AU.stopLoops(true);AU.crashBuzz();showScreen('sCrash');
+  $('#crash1').textContent=t('crash1');$('#crash2').textContent=t('crash2');$('#crash3').textContent=t('crash3');
+  setTimeout(()=>{if(mode==='crash')toTitle();},4800);}
+
+/* drawing */
+function drawGoatSign(c,id){const G_=g&&g.goat;if(!G_||G_.phase!=='sign'||G_.cam!==id)return;const [x,y,s]=GOAT_POS[id];
+  drawGoatHead(c,x,y,s,{alpha:.5+.18*Math.sin(T*2.3)+(Math.random()<.05?.25:0),eyes:.9});}
+function drawGoatOffice(c){const G_=g&&g.goat;if(!G_||G_.phase!=='office')return;const fl=Math.random()<.12?.55:1;
+  c.save();c.globalAlpha=.9*fl;c.fillStyle='#0c0b0f';c.beginPath();c.moveTo(560,372);c.quadraticCurveTo(640,340,720,372);c.lineTo(780,610);c.lineTo(500,610);c.closePath();c.fill();
+  c.fillStyle='#e9e4d8';c.beginPath();c.ellipse(636,374,60,16,0,0,7);c.fill();c.restore();
+  glow(c,628,290,280,'255,210,120',.12);drawGoatHead(c,628,292,150,{alpha:.92*fl,tilt:-.32,eyes:.95});}
+function drawGoatOverlay(c){if(!g)return;
+  if(g.goat&&g.goat.phase==='office'){c.fillStyle='rgba(30,22,8,.18)';c.fillRect(0,0,W,H);c.globalAlpha=.12;c.drawImage(NOISE[frameN%4],0,0,W,H);c.globalAlpha=1;}
+  if(g.goatFlash>0){c.fillStyle='rgba(0,0,0,.6)';c.fillRect(0,0,W,H);drawGoatHead(c,W/2,H/2+30,H*.7,{eyes:1});
+    c.save();c.font='140px VT323, monospace';c.textAlign='center';c.fillStyle='rgba(255,230,180,.9)';c.fillText('BEEE',W/2,H-60);c.restore();}}
+
 /* ---------- hidden dev console (open with the º / ` key, F2, #dev in the URL, or 5 taps on "Five Nights at") ---------- */
 const DEV={on:false,god:false,freeze:false,power:false,clock:false,log:[],el:null,stateEl:null,logEl:null,timer:0};
 function devLog(msg){const ts=g?`${g.hour===0?12:g.hour}AM+${Math.floor(g.t%HOUR)}s`:mode;DEV.log.push(`[${ts}] ${msg}`);if(DEV.log.length>80)DEV.log.shift();if(DEV.on&&DEV.logEl)devRenderLog();}
@@ -1589,7 +1662,8 @@ function devRepel(type){devLog('god mode blocked: '+type);toast('DEV · '+type);
   if(type==='founder'){g.F.pos=0;g.F.t=0;}else if(type==='examiner'){g.E.pos=0;g.E.t=0;}
   else if(type==='choir'){g.candles=[1,1,1,1,1];g.choirT=null;}else if(type==='torno'){g.tor.state='idle';g.tor.next=30;g.tor.fails=0;g.tor.target=Math.PI;closePanels();}
   else if(type==='prefect'){g.out=null;g.power=100;$('#officeUI').hidden=false;$('#camBar').hidden=false;AU.startLoops();}
-  else if(type==='eagle'){g.eagle=null;angelCooldown();}}
+  else if(type==='eagle'){g.eagle=null;angelCooldown();}
+  else if(type==='goat'){g.goat=null;}}
 function devStartNight(n){AU.init();AU.stopMenu();closePanels();startNight(n,n==='C'?Object.assign({},customCfg):undefined);devLog('start night '+n);}
 const DEV_ACTIONS={
   n1:()=>devStartNight(1),n2:()=>devStartNight(2),n3:()=>devStartNight(3),n4:()=>devStartNight(4),n5:()=>devStartNight(5),nc:()=>devStartNight('C'),
@@ -1601,7 +1675,8 @@ const DEV_ACTIONS={
   choir:()=>{devEnsureNight();g.cfg.choir=Math.max(1,g.cfg.choir);g.candles=[0,0,0,0,0];},
   prefect:()=>{devEnsureNight();g.cfg.prefect=Math.max(1,g.cfg.prefect);g.P.cam=g.cams?g.cam:pick(CAMS);g.P.left=9;g.P.gaze=0;},
   angel:()=>{devEnsureNight();if(g.eagle||angelActive())return;startTyping();},eagle:()=>{devEnsureNight();if(g.eagle||angelActive())return;startSend();},
-  stun:()=>{devEnsureNight();g.stun=6;AU.stunHit();},exams:()=>{devEnsureNight();g.exams+=5;},
+  stun:()=>{devEnsureNight();g.stun=6;AU.stunHit();},
+  goat:()=>{devEnsureNight();goatSign();},goatoffice:()=>{devEnsureNight();if(g.cams)setCams(false,true);g.goat={phase:'marked'};},goatflash:()=>{devEnsureNight();g.goatFlash=.18;AU.bleat(260,.35,.12);},s_goat:()=>{devEnsureNight();scare('goat',true);},exams:()=>{devEnsureNight();g.exams+=5;},
   s_founder:()=>{devEnsureNight();scare('founder',true);},s_examiner:()=>{devEnsureNight();scare('examiner',true);},s_choir:()=>{devEnsureNight();scare('choir',true);},
   s_torno:()=>{devEnsureNight();scare('torno',true);},s_prefect:()=>{devEnsureNight();scare('prefect',true);},s_eagle:()=>{devEnsureNight();scare('eagle',true);},
   unlock:()=>{progress.done=[1,2,3,4,5];progress.current=null;saveProgress();devLog('all nights unlocked');if(mode==='title')toTitle();},
@@ -1621,9 +1696,9 @@ function devBuild(){
   <div class="dvS">NIGHT</div><div class="dvR">${btn('n1','1')}${btn('n2','2')}${btn('n3','3')}${btn('n4','4')}${btn('n5','5')}${btn('nc','CUSTOM')}${btn('title','TITLE')}</div>
   <div class="dvS">TIME · POWER</div><div class="dvR">${btn('hour','+1 HOUR')}${btn('five','5 AM')}${btn('win','WIN NOW')}${btn('p100','POWER 100')}${btn('p10','POWER 10')}${btn('pout','POWER OUT')}</div>
   <div class="dvS">CHEATS</div><div class="dvR">${tog('god','God mode')}${tog('freeze','Freeze AI')}${tog('power','Infinite power')}${tog('clock','Clock always wound')}</div>
-  <div class="dvS">TRIGGER</div><div class="dvR">${btn('founder','FOUNDER AT DOOR')}${btn('examiner','EXAMINER KNOCKS')}${btn('torno','TORNO')}${btn('choir','CANDLES OUT')}${btn('prefect','PREFECT ON CAM')}${btn('angel','J. ANGEL')}${btn('eagle','EAGLE')}${btn('stun','STUN')}${btn('exams','+5 EXAMS')}</div>
-  <div class="dvS">JUMPSCARES</div><div class="dvR">${btn('s_founder','FOUNDER')}${btn('s_examiner','EXAMINER')}${btn('s_choir','CHOIR')}${btn('s_torno','TORNO')}${btn('s_prefect','PREFECT')}${btn('s_eagle','EAGLE')}</div>
-  <div class="dvS">AI LEVELS (LIVE)</div><div class="dvR dvAI">${['founder','examiner','choir','torno','prefect','angel'].map(k=>`<label>${({founder:'FOUND.',examiner:'EXAM.',choir:'CHOIR',torno:'TORNO',prefect:'PREF.',angel:'ANGEL'})[k]}<input type="number" min="0" max="20" data-ai="${k}"></label>`).join('')}</div>
+  <div class="dvS">TRIGGER</div><div class="dvR">${btn('founder','FOUNDER AT DOOR')}${btn('examiner','EXAMINER KNOCKS')}${btn('torno','TORNO')}${btn('choir','CANDLES OUT')}${btn('prefect','PREFECT ON CAM')}${btn('angel','J. ANGEL')}${btn('eagle','EAGLE')}${btn('stun','STUN')}${btn('goat','GOAT SIGN')}${btn('goatoffice','GOAT IN LODGE')}${btn('goatflash','GOAT FLASH')}${btn('exams','+5 EXAMS')}</div>
+  <div class="dvS">JUMPSCARES</div><div class="dvR">${btn('s_founder','FOUNDER')}${btn('s_examiner','EXAMINER')}${btn('s_choir','CHOIR')}${btn('s_torno','TORNO')}${btn('s_prefect','PREFECT')}${btn('s_eagle','EAGLE')}${btn('s_goat','GOAT')}</div>
+  <div class="dvS">AI LEVELS (LIVE)</div><div class="dvR dvAI">${['founder','examiner','choir','torno','prefect','angel','goat'].map(k=>`<label>${({founder:'FOUND.',examiner:'EXAM.',choir:'CHOIR',torno:'TORNO',prefect:'PREF.',angel:'ANGEL',goat:'GOAT'})[k]}<input type="number" min="0" max="20" data-ai="${k}"></label>`).join('')}</div>
   <div class="dvS">PROGRESS</div><div class="dvR">${btn('unlock','UNLOCK ALL')}${btn('reset','RESET PROGRESS')}${btn('words','RESTART GLOSSARY')}${btn('news','SHOW LOG')}${btn('lang','ES / EN')}</div>
   <div class="dvS">EVENTS · ERRORS</div><pre id="devLog"></pre>`;
   $('#wrap').appendChild(el);DEV.el=el;DEV.stateEl=el.querySelector('#devState');DEV.logEl=el.querySelector('#devLog');
@@ -1641,7 +1716,7 @@ function devTick(){const s=DEV.stateEl;if(!s)return;
    `power ${g.power.toFixed(1)}% · use ${g.use} · clock ${g.spring.toFixed(0)}${g.clockStopped?' STOPPED':''} · exams ${g.exams}\n`+
    `founder pos ${g.F.pos}${g.F.pos===3?' door '+g.F.door.toFixed(1):''} · examiner pos ${g.E.pos}${g.E.pos===2?' door '+g.E.door.toFixed(1):''}\n`+
    `torno ${g.tor.state}${g.tor.state==='req'?' '+g.tor.want+' '+g.tor.timer.toFixed(1):''} fails ${g.tor.fails} · candles ${g.candles.join('')}${g.choirT!=null?' choir '+g.choirT.toFixed(1):''}\n`+
-   `prefect ${g.P.cam||'-'} · angel ${A.mode||'idle'} next ${(A.next||0).toFixed(0)}${A.mode==='type'?' "'+A.word+'" '+A.t.toFixed(1):''}${e?' · eagle '+e.t.toFixed(1)+' '+e.rs.filter(r=>r.hit).length+'/8':''}${g.stun>0?' · stun '+g.stun.toFixed(1):''}`;
+   `prefect ${g.P.cam||'-'} · angel ${A.mode||'idle'} next ${(A.next||0).toFixed(0)}${A.mode==='type'?' "'+A.word+'" '+A.t.toFixed(1):''}${e?' · eagle '+e.t.toFixed(1)+' '+e.rs.filter(r=>r.hit).length+'/8':''}${g.stun>0?' · stun '+g.stun.toFixed(1):''}${g.goat?' · goat '+g.goat.phase+(g.goat.cam?' '+g.goat.cam:'')+(g.goat.t!=null?' '+g.goat.t.toFixed(1):''):''}`;
   DEV.el.querySelectorAll('[data-ai]').forEach(inp=>{if(document.activeElement!==inp)inp.value=g.cfg[inp.dataset.ai]??0;});}
 window.addEventListener('keydown',e=>{const k=e.key;if(k==='F2'||((k==='º'||k==='`'||e.code==='Backquote')&&e.target.tagName!=='INPUT')){e.preventDefault();devToggle();}});
 function devWire(){let taps=[];
@@ -1649,7 +1724,7 @@ function devWire(){let taps=[];
   if(location.hash==='#dev')devToggle(true);}
 
 /* ---------- screens ---------- */
-const SCREENS=['sLang','sNews','sTitle','sNights','sFaculty','sHelp','sIntro','sDead','sWin','sEnd','sPause'];
+const SCREENS=['sLang','sNews','sCrash','sTitle','sNights','sFaculty','sHelp','sIntro','sDead','sWin','sEnd','sPause'];
 function showScreen(id){for(const s of SCREENS)$('#'+s).hidden=s!==id;}
 function curNight(){const c=progress.current;return Number.isInteger(c)&&c>=1&&c<=5?c:null;}
 function nextNight(){for(let n=1;n<=5;n++)if(!progress.done.includes(n))return n;return 5;}
@@ -1676,9 +1751,9 @@ let pendingCustom=null;
 function intro(n,custom){AU.startMenu();pendingCustom=custom||null;lastNight=n;mode='intro';showScreen('sIntro');$('#inNight').textContent=n==='C'?t('customNight'):t('nightLabel',n);
   const lv=n==='C'&&custom?(()=>{const lab=t('sliders');return `<p class="lv">${t('customLevels')}<br>${SL_KEYS.map(k=>`${lab[k]} <b>${custom[k]??0}</b>`).join(' · ')}</p>`;})():'';
   $('#note').innerHTML=`<div class="nh">${t('noteHead',n)}</div>`+t('notes')[n]()+lv;$('#note').scrollTop=0;}
-const SL_KEYS=['founder','examiner','choir','torno','prefect','angel'];
-const PRESETS=[[2,2,2,2,0,0],[6,20,4,4,6,6],[20,20,20,20,20,20]];
-let customCfg=Object.assign({founder:10,examiner:10,choir:10,torno:10,prefect:10,angel:10},store.get('custom',{}));
+const SL_KEYS=['founder','examiner','choir','torno','prefect','angel','goat'];
+const PRESETS=[[2,2,2,2,0,0,0],[6,20,4,4,6,6,2],[20,20,20,20,20,20,20]];
+let customCfg=Object.assign({founder:10,examiner:10,choir:10,torno:10,prefect:10,angel:10,goat:3},store.get('custom',{}));
 function buildNights(){
   const subs=t('nightSubs');
   $('#nightCards').innerHTML=[1,2,3,4,5].map(n=>`<button class="nCard" data-n="${n}"><b>${t('nightLabel',n)}</b><span>${subs[n-1]}</span><span class="${progress.done.includes(n)?'done':''}">${progress.done.includes(n)?t('kept',progress.best[n]||'-'):t('notKept')}</span></button>`).join('');
@@ -1696,12 +1771,14 @@ function buildFaculty(){
   const cards=t('fac');
   $('#facCards').innerHTML=cards.map(cd=>`<div class="fCard"><canvas id="fc_${cd.k}" width="220" height="230"></canvas><h3 id="fn_${cd.k}"></h3>${cd.role?`<div class="role">${cd.role}</div>`:''}<div class="where">${cd.where}</div><p>${cd.bio}</p><p class="how">${cd.how}</p></div>`).join('');
   facNames();
-  const draw=(k,fn)=>{const c=$('#fc_'+k).getContext('2d');c.fillStyle='#0a090c';c.fillRect(0,0,220,230);fn(c);};
+  $('#facCards').style.setProperty('--n',cards.length);
+  const draw=(k,fn)=>{const el=$('#fc_'+k);if(!el)return;const c=el.getContext('2d');c.fillStyle='#0a090c';c.fillRect(0,0,220,230);fn(c);};
   draw('founder',c=>{frameAt(c,40,18,140,192,12);coverImg(c,F.img,52,30,116,168);});
   draw('examiner',c=>{c.drawImage(E.upper,25,5,172,240);});
   draw('choir',c=>{[60,110,160].forEach(x=>drawGirl(c,x,46,17,true));});
   draw('torno',c=>{drawTornoAt(c,110,30,215,70,0,{hand:true});});
   draw('prefect',c=>{c.drawImage(P.upper,28,5,165,220);});
+  draw('goat',c=>{const gr=c.createRadialGradient(110,120,10,110,120,140);gr.addColorStop(0,'#3a2e18');gr.addColorStop(1,'#0a090c');c.fillStyle=gr;c.fillRect(0,0,220,230);drawGoatHead(c,110,128,120,{eyes:1});});
   draw('angel',c=>{if(ANG.upper)c.drawImage(ANG.upper,28,5,165,220);if(ANG.eagle){const s=110/ANG.eagle.width;c.drawImage(ANG.eagle,118,150,110,ANG.eagle.height*s);}});
   for(const [id,k] of NAME_INPUTS){const el=$(id);el.value=nameOv[k]||'';el.placeholder=t('def_'+k);}
 }
@@ -1744,7 +1821,7 @@ function wire(){
   $('#bQuit').addEventListener('click',()=>{if(AU.c)AU.c.resume();toTitle();});
   $('#lgEs').addEventListener('click',()=>{AU.init();setLang('es');afterLang();});
   $('#lgEn').addEventListener('click',()=>{AU.init();setLang('en');afterLang();});
-  $('#bNews').addEventListener('click',toTitle);$('#bCustom').addEventListener('click',()=>intro('C',Object.assign({},customCfg)));$('#mNews').addEventListener('click',showNews);
+  $('#bNews').addEventListener('click',toTitle);$('#sCrash').addEventListener('click',()=>{if(mode==='crash')toTitle();});$('#bCustom').addEventListener('click',()=>intro('C',Object.assign({},customCfg)));$('#mNews').addEventListener('click',showNews);
   $('#mLang').addEventListener('click',showLang);
   $('#mBegin').addEventListener('click',()=>{AU.init();intro(curNight()||(progress.done.length>=5?5:nextNight()));});
   $('#mNights').addEventListener('click',()=>{AU.init();buildNights();showScreen('sNights');});
@@ -1777,8 +1854,9 @@ function render(){
     if(g.cams){const st={F:g.F.pos,E:g.E.pos,P:g.P.cam,candles:g.candles,choirGone:g.choirT!=null};
       if(g.camOff>0){c.fillStyle='#0b120d';c.fillRect(0,0,W,H);cctv(c,1);}else{renderCamScene(c,g.cam,st);cctv(c,g.camSwitchT/.3);drawRoundels(c,g.cam);}}
     else{renderOffice();drawAngelOverlay(c);}
+    drawGoatOverlay(c);
   }else if(mode==='scare')renderScare();
-  else if(mode==='dead'){c.fillStyle='#000';c.fillRect(0,0,W,H);}
+  else if(mode==='dead'||mode==='crash'){c.fillStyle='#000';c.fillRect(0,0,W,H);}
   else if(mode==='win'||mode==='end'){const gr=c.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#14101c');gr.addColorStop(1,'#5a3418');c.fillStyle=gr;c.fillRect(0,0,W,H);}
   else{glitchT-=1/60;if(glitchT<=0){MENU_ST.glitch=Math.random()<.12;glitchT=MENU_ST.glitch?.18:rand(1.5,4);}
     c.fillStyle='#000';c.fillRect(0,0,W,H);const ox=mode==='title'?230:0;
