@@ -69,7 +69,8 @@ h1{margin:2px 0 0;font-family:var(--f-display);font-weight:400;font-size:52px;li
 .watch{flex:none;white-space:nowrap;font-family:var(--f-hud);font-size:17px;letter-spacing:.1em;padding:4px 10px;border-radius:4px;border:1px solid var(--cctv);background:transparent;color:var(--cctv)}
 .watch.on{background:var(--cctv);color:#08110b}
 .vid{position:relative;aspect-ratio:16/9;max-width:100%;background:#020403;border:1px solid var(--line);border-radius:5px;overflow:hidden}
-.vid video{width:100%;height:100%;object-fit:contain;display:block}
+.vid img{width:100%;height:100%;object-fit:contain;display:block}
+.vid .bg{position:absolute;right:8px;top:6px;font-family:var(--f-hud);font-size:16px;color:var(--amber);text-shadow:0 0 4px #000}
 .vid .vOff{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-hud);font-size:20px;letter-spacing:.1em;color:var(--dim)}
 .pc.live .vOff{display:none}
 .vid .rec{position:absolute;left:8px;top:6px;font-family:var(--f-hud);font-size:18px;color:var(--red);text-shadow:0 0 4px #000}
@@ -168,7 +169,7 @@ function chips(s){const c=[];if(!s||s.n==null||!['play','paused','scare'].includ
   if(s.eg!=null)c.push([`Águila · dianas ${s.eg}/8`,'bad']);
   if(s.gt)c.push([({sign:'America en una cámara',marked:'America la ha marcado',office:'America en la portería'})[s.gt]||'America','bad']);
   if(s.st)c.push(['Aturdida','warn']);if(s.out)c.push(['Apagón','bad']);if(s.dead)c.push([`Susto de ${KILLN[s.dead]||s.dead}`,'bad']);
-  if(s.dl)c.push(['Puerta izquierda cerrada','info']);if(s.dr)c.push(['Puerta derecha cerrada','info']);return c;}
+  if(s.vis===false)c.push(['Juego en segundo plano','warn']);if(s.dl)c.push(['Puerta izquierda cerrada','info']);if(s.dr)c.push(['Puerta derecha cerrada','info']);return c;}
 function draw(p){const s=p.s,el=p.el,inNight=!!(s&&s.n!=null&&['play','paused','scare'].includes(s.m));
   $('.nm',el).textContent=who(p);$('.sub',el).textContent=`${p.dev||''}${p.lang?' · '+p.lang.toUpperCase():''}${s?` · ${s.done||0}/5 noches`:''}`;
   $('.mode',el).textContent=modeText(s);el.classList.toggle('idle',!inNight);el.classList.toggle('playing',inNight);
@@ -178,35 +179,41 @@ function draw(p){const s=p.s,el=p.el,inNight=!!(s&&s.n!=null&&['play','paused','
 function addP(c,d){const old=P.get(c.peer);if(old)removeCard(old);
   const el=document.createElement('article');el.className='pc idle';
   el.innerHTML=`<div class="pcH"><div><b class="nm"></b><span class="sub"></span></div><div style="display:grid;justify-items:end;gap:6px"><span class="mode"></span><button class="watch">VER PARTIDA</button></div></div>
-    <div class="vid" hidden><video muted playsinline autoplay></video><div class="vOff">CONECTANDO EL VÍDEO…</div><span class="rec">● EN DIRECTO</span></div>
+    <div class="vid" hidden><img class="frame" alt="Pantalla del jugador"><div class="vOff">ESPERANDO IMAGEN…</div><span class="rec">● EN DIRECTO</span></div>
     <div class="stats"><div class="st"><span>GENERADOR</span><b data-s="pw">—</b></div><div class="st"><span>RELOJ</span><b data-s="sp">—</b></div><div class="st"><span>EXÁMENES</span><b data-s="ex">—</b></div><div class="st"><span>MIRANDO</span><b data-s="c">—</b></div></div>
     <div class="chips"></div><div class="groups">${groupsHTML()}</div>
     <form class="msg"><input type="text" maxlength="160" placeholder="Mensaje…" aria-label="Mensaje"><label><input type="checkbox"> en voz alta</label><button class="btn">ENVIAR</button></form>`;
-  const p={last:Date.now(),c,id:c.peer,nm:typeof d.nm==='string'?d.nm.slice(0,28):'',lang:d.lang,dev:d.dev,s:null,el,video:$('video',el),watching:false,call:null,lastChips:''};
+  const p={last:Date.now(),c,id:c.peer,nm:typeof d.nm==='string'?d.nm.slice(0,28):'',lang:d.lang,dev:d.dev,s:null,el,img:$('img.frame',el),lastFrame:0,watching:false,call:null,lastChips:''};
   el.querySelectorAll('.act').forEach(b=>b.addEventListener('click',()=>{const c_=b.dataset.c;if(sendCmd(p,c_))log(`→ ${who(p)}: ${LABEL[c_]||c_}`);}));
   $('.watch',el).addEventListener('click',()=>toggleWatch(p));
   $('.msg',el).addEventListener('submit',e=>{e.preventDefault();const i=$('input[type=text]',el),v=i.value.trim();if(!v)return;const voice=$('input[type=checkbox]',el).checked;if(send(p,{t:'msg',text:v,voice}))log(`→ ${who(p)}: «${v}»${voice?' (en voz alta)':''}`);i.value='';});
   P.set(c.peer,p);$('#grid').appendChild(el);draw(p);counts();log(`Se ha conectado ${who(p)} (${p.dev||'?'})`);}
-function removeCard(p){try{p.call&&p.call.close();}catch(e){}p.el.remove();P.delete(p.id);counts();}
+function removeCard(p){p.el.remove();P.delete(p.id);counts();}
 function dropP(c){const p=P.get(c.peer);if(!p||p.c!==c)return;removeCard(p);log(`Se ha ido ${who(p)}`);}
 function onAck(p,d){if(d.ok)return;const why=d.why==='no-play'?'no está jugando una noche':d.why==='unknown'?'orden desconocida':d.why;log(`✗ ${who(p)}: ${LABEL[d.cmd]||d.cmd} no ha llegado (${why})`);}
-function toggleWatch(p){const b=$('.watch',p.el);if(!p.watching){p.watching=true;$('.vid',p.el).hidden=false;b.textContent='DEJAR DE VER';b.classList.add('on');send(p,{t:'watch'});log(`Viendo la pantalla de ${who(p)}`);}
-  else{p.watching=false;b.textContent='VER PARTIDA';b.classList.remove('on');send(p,{t:'unwatch'});try{p.call&&p.call.close();}catch(e){}p.call=null;p.video.srcObject=null;p.el.classList.remove('live');$('.vid',p.el).hidden=true;}}
-function onCall(call){const p=P.get(call.peer);if(!p||!p.watching){try{call.close();}catch(e){}return;}call.answer();p.call=call;
-  call.on('stream',st=>{p.video.srcObject=st;p.video.play().catch(()=>{});p.el.classList.add('live');});
-  call.on('close',()=>{if(p.call!==call)return;p.call=null;p.video.srcObject=null;p.el.classList.remove('live');if(p.watching){p.watching=false;const b=$('.watch',p.el);b.textContent='VER PARTIDA';b.classList.remove('on');$('.vid',p.el).hidden=true;}});}
+function setWatchUI(p,on){const b=$('.watch',p.el);b.textContent=on?'DEJAR DE VER':'VER PARTIDA';b.classList.toggle('on',on);$('.vid',p.el).hidden=!on;if(!on){p.el.classList.remove('live');p.img.removeAttribute('src');$('.vOff',p.el).textContent='ESPERANDO IMAGEN…';}}
+function toggleWatch(p){if(!p.watching){p.watching=true;p.watchT=Date.now();p.lastFrame=0;setWatchUI(p,true);send(p,{t:'watch'});log(`Viendo la pantalla de ${who(p)}`);}
+  else{p.watching=false;setWatchUI(p,false);send(p,{t:'unwatch'});}}
+function onFrame(p,d){if(!p.watching||typeof d.d!=='string'||!d.d.startsWith('data:image/'))return;p.img.src=d.d;p.lastFrame=Date.now();p.el.classList.add('live');
+  const r=$('.rec',p.el);r.textContent=d.vis===false?'● EN DIRECTO · juego en segundo plano':'● EN DIRECTO';}
+function onChunk(p,d){if(!p.watching||typeof d.s!=='string')return;const f=d.f|0,n=d.n|0,i=d.i|0;if(n<1||n>40||i<0||i>=n)return;
+  if(!p.fb||p.fb.f!==f){if(p.fb&&f<p.fb.f)return;p.fb={f,n,parts:new Array(n),got:0};}const fb=p.fb;if(fb.parts[i]==null){fb.parts[i]=d.s;fb.got++;}
+  if(fb.got===fb.n){p.fb=null;onFrame(p,{d:fb.parts.join(''),vis:d.vis});}}
+function watchCheck(){const now=Date.now();for(const p of P.values()){if(!p.watching)continue;const o=$('.vOff',p.el);
+  if(p.lastFrame&&now-p.lastFrame>5000){p.el.classList.remove('live');o.textContent='LA IMAGEN SE HA CORTADO · REINTENTANDO…';if(now-(p.reWatch||0)>6000){p.reWatch=now;send(p,{t:'watch'});}}
+  else if(!p.lastFrame&&now-p.watchT>6000){o.textContent='NO LLEGA IMAGEN · REINTENTANDO…';if(now-(p.reWatch||0)>6000){p.reWatch=now;send(p,{t:'watch'});}}}}
 function onConn(c){c.on('data',async d=>{if(!d||typeof d!=='object')return;
     if(d.t==='challenge'){if(typeof d.n==='string'&&d.n.length<=64){try{c.send({t:'proof',sig:await signN(d.n)});}catch(e){}}return;}
     if(d.t==='hello'){addP(c,d);return;}
     const p=P.get(c.peer);if(!p||p.c!==c)return;p.last=Date.now();
-    if(d.t==='state'){p.s=d.s||null;if(typeof d.nm==='string')p.nm=d.nm.slice(0,28);draw(p);}else if(d.t==='ack')onAck(p,d);});
-  c.on('close',()=>dropP(c));c.on('error',()=>dropP(c));}
+    if(d.t==='state'){p.s=d.s||null;if(typeof d.nm==='string')p.nm=d.nm.slice(0,28);draw(p);}else if(d.t==='fc')onChunk(p,d);else if(d.t==='ack')onAck(p,d);});
+  c.on('close',()=>dropP(c));c.on('error',()=>{if(!c.open)dropP(c);});}
 function start(){if(!window.Peer){status('No se ha podido cargar la conexión. Revisa internet y recarga.','bad');return;}
   status('Conectando…','wait');peer=new Peer(ADMIN_ID,CFG);
   peer.on('open',()=>{status('En línea','ok');log('Panel en línea. Esperando jugadores.');});
   peer.on('error',e=>{const ty=e&&e.type;if(ty==='unavailable-id')status('Ya hay otro panel abierto. Ciérralo y recarga esta página.','bad');else if(ty!=='peer-unavailable'){log('Error de conexión: '+ty);status('Problema de conexión. Reintentando…','wait');}});
   peer.on('disconnected',()=>{status('Reconectando…','wait');setTimeout(()=>{try{if(peer&&!peer.destroyed&&peer.disconnected)peer.reconnect();}catch(e){}},2500);});
-  peer.on('connection',onConn);peer.on('call',onCall);
+  peer.on('connection',onConn);peer.on('call',call=>{try{call.close();}catch(e){}});setInterval(watchCheck,1000);
   window.addEventListener('beforeunload',()=>{try{peer.destroy();}catch(e){}});}
 function showPanel(){$('#keyBox').hidden=true;$('#panel').hidden=false;
   $('#allActs').innerHTML=groupsHTML();

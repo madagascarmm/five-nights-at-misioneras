@@ -1727,7 +1727,7 @@ function devWire(){let taps=[];
 /* ---------- live link to the director's panel (only on the GitHub site, where PeerJS loads) ---------- */
 const NET_ADMIN_ID='fnam-misioneras-director-q7k2v9';
 const NET_PUB={kty:'EC',crv:'P-256',x:'40lSZOJrBxcc8BoJmUYEBi1m7FkXqHD8qpeLAEIwDPk',y:'X43YBtbHHYoWLEu_1iIMwLeWZ1DEq2CrRf2zLNfp0MI'};
-const NET={peer:null,conn:null,ok:false,last:0,state:'off',challenge:null,call:null,streaming:false,sc:null,sx:null,tries:0};
+const NET={peer:null,conn:null,ok:false,last:0,state:'off',challenge:null,fT:0,q:.55,streaming:false,sc:null,sx:null,tries:0};
 function netB64(buf){let s='';for(const x of new Uint8Array(buf))s+=String.fromCharCode(x);return btoa(s);}
 function netUnB64(s){const bin=atob(s),b=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);return b;}
 async function netVerify(nonce,sig){try{const k=await crypto.subtle.importKey('jwk',NET_PUB,{name:'ECDSA',namedCurve:'P-256'},false,['verify']);
@@ -1749,7 +1749,7 @@ function netTry(){const p=NET.peer;if(!p||!p.open||NET.conn)return;let c;try{c=p
   c.on('open',()=>{const r=new Uint8Array(24);crypto.getRandomValues(r);NET.challenge=netB64(r);try{c.send({t:'challenge',n:NET.challenge,v:2});}catch(e){}});
   c.on('data',d=>netOnData(c,d));
   c.on('close',()=>{if(NET.conn===c)netDrop();});
-  c.on('error',()=>{if(NET.conn===c)netDrop();});
+  c.on('error',e=>{devLog('net: '+((e&&e.type)||'error'));if(NET.conn===c&&!c.open)netDrop();});
   setTimeout(()=>{if(NET.conn===c&&!NET.ok)netDrop();},10000);}
 function netDrop(){const c=NET.conn;NET.ok=false;NET.conn=null;NET.challenge=null;try{c&&c.close();}catch(e){}netStopStream();if(NET.peer&&NET.peer.open)NET.state='waiting';}
 async function netOnData(c,d){if(!d||typeof d!=='object'||NET.conn!==c)return;NET.last=Date.now();
@@ -1760,7 +1760,7 @@ function netInfo(){let dev='ordenador';try{if(matchMedia('(pointer:coarse)').mat
 function netSnap(){const s={m:mode,done:progress.done.length};if(g){s.n=g.night;s.h=g.hour;s.ts=Math.round(g.t);s.pw=Math.round(Math.max(0,g.power));s.sp=Math.round(g.spring);s.ex=g.exams;
   s.c=g.cams?g.cam:null;s.dl=g.doorL;s.dr=g.doorR;s.F=g.F.pos;s.E=g.E.pos;s.tor=g.tor.state;s.cand=g.candles.reduce((a,b)=>a+b,0);s.P=g.P.cam;
   s.A=g.A?g.A.mode:null;s.w=g.A&&g.A.mode==='type'?g.A.word:null;s.eg=g.eagle?g.eagle.rs.filter(r=>r.hit).length:null;s.gt=g.goat?g.goat.phase:null;
-  s.st=g.stun>0;s.out=!!g.out;s.dead=g.scare?g.scare.type:null;}return s;}
+  s.st=g.stun>0;s.out=!!g.out;s.dead=g.scare?g.scare.type:null;}s.vis=!document.hidden;return s;}
 function netSend(){if(!NET.ok||!NET.conn||!NET.conn.open)return;if(Date.now()-NET.last>12000){devLog('net: el director no responde');netDrop();return;}try{NET.conn.send({t:'state',s:netSnap(),nm:(nameOv.player||'').slice(0,28)});}catch(e){}}
 const NET_CMDS={
   founder:()=>{g.cfg.founder=Math.max(1,g.cfg.founder);if(g.F.pos<3){g.F.pos=3;g.F.door=7;g.F.seen=false;AU.creak(-.8);}},
@@ -1786,10 +1786,15 @@ function netRun(c,d){const f=NET_CMDS[d.cmd];if(!f)return netAck(c,d,false,'unkn
   try{f(d);devLog('director: '+d.cmd);netAck(c,d,true);}catch(e){netAck(c,d,false,e.message);}}
 function netMsg(c,d){const text=String(d.text||'').replace(/\s+/g,' ').trim().slice(0,160);if(!text)return;let ok=false;
   if(g&&mode==='play'){caption(text);ok=true;}if(d.voice&&AU.on){say(text);ok=true;}devLog('director (mensaje): '+text);netAck(c,d,ok,ok?'':'no-play');}
-function netStartStream(){if(NET.call||!NET.ok||!NET.peer)return;if(!NET.sc){NET.sc=document.createElement('canvas');NET.sc.width=640;NET.sc.height=360;NET.sx=NET.sc.getContext('2d');}
-  if(!NET.sc.captureStream)return;netDrawStream();let call;try{call=NET.peer.call(NET_ADMIN_ID,NET.sc.captureStream(12),{metadata:{kind:'view'}});}catch(e){return;}if(!call)return;
-  NET.call=call;NET.streaming=true;call.on('close',()=>{if(NET.call===call)netStopStream();});call.on('error',()=>{if(NET.call===call)netStopStream();});}
-function netStopStream(){NET.streaming=false;const c=NET.call;NET.call=null;try{c&&c.close();}catch(e){}}
+function netStartStream(){if(!NET.ok||!NET.conn)return;if(!NET.sc){NET.sc=document.createElement('canvas');NET.sc.width=640;NET.sc.height=360;NET.sx=NET.sc.getContext('2d');}
+  clearInterval(NET.fT);NET.streaming=true;NET.q=.55;NET.fT=setInterval(netFrame,170);netFrame();}
+function netStopStream(){NET.streaming=false;clearInterval(NET.fT);NET.fT=0;}
+function netFrame(){const c=NET.conn;if(!NET.streaming)return;if(!NET.ok||!c||!c.open){netStopStream();return;}
+  const dc=c.dataChannel;if(dc&&dc.bufferedAmount>700000)return;
+  try{netDrawStream();let url=NET.sc.toDataURL('image/jpeg',NET.q);
+    if(url.length>140000)NET.q=Math.max(.3,NET.q-.08);else if(url.length<60000&&NET.q<.6)NET.q+=.02;
+    const n=Math.ceil(url.length/12000),f=NET.fid=(NET.fid||0)+1,vis=!document.hidden;
+    for(let i=0;i<n;i++)c.send({t:'fc',f,i,n,s:url.slice(i*12000,(i+1)*12000),vis});}catch(e){devLog('net frame: '+e.message);}}
 const NET_MODE={lang:'ELIGIENDO IDIOMA',news:'LEYENDO NOVEDADES',title:'EN EL MENÚ',intro:'LEYENDO LA NOTA',dead:'PANTALLA DE MUERTE',win:'6 AM',end:'FINAL',crash:'CUELGUE DE AMERICA'};
 function netDrawStream(){const x=NET.sx;if(!x)return;x.drawImage(cv,0,0,640,360);x.save();x.shadowColor='#000';x.shadowBlur=5;x.fillStyle='#fff';x.font='22px VT323, monospace';
   if(g&&(mode==='play'||mode==='paused')){x.textAlign='right';x.fillText(`${g.hour===0?12:g.hour} AM · ${g.night==='C'?'PERSONALIZADA':'NOCHE '+g.night}`,630,24);
@@ -1925,7 +1930,6 @@ function loop(ts){
     if(mode==='play'){update(dt);if(mode==='play')syncHud();}
     if(mode==='scare'){g.scare.t+=dt;if(g.scare.t>=1.85)showDeath(g.scare.type);}
     render(dt);
-    if(NET.streaming&&frameN%5===0)netDrawStream();
   }catch(err){console.error(err);devLog('ERROR '+(err&&err.message||err));}
   requestAnimationFrame(loop);
 }
