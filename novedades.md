@@ -9,6 +9,9 @@ Cómo añadir una novedad:
 Cuando cambias el título de la primera entrada, los jugadores verán el registro al abrir el juego.
 -->
 
+## v2.2 · 19 de octubre de 2026
+- Se ha añadido un **enemigo secreto**. Es muy raro encontrárselo.
+
 ## v2.1 · 19 de octubre de 2026
 - P. Flor ha sido sustituida por **J. Church**, el nuevo Prefecto.
 - El Prefecto aparece mucho más a menudo en las cámaras.
