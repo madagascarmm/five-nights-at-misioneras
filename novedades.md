@@ -9,6 +9,10 @@ Cómo añadir una novedad:
 Cuando cambias el título de la primera entrada, los jugadores verán el registro al abrir el juego.
 -->
 
+## v2.1 · 19 de octubre de 2026
+- P. Flor ha sido sustituida por **J. Church**, el nuevo Prefecto.
+- El Prefecto aparece mucho más a menudo en las cámaras.
+
 ## v2.0 · 17 de octubre de 2026
 - **Nuevo personaje: J. Angel.** Aparece desde la noche 3, grita «HAZ UNA LETRITA» y congela a todos hasta que escribas su palabra. Si no llegas a tiempo, te deja aturdida 6 segundos y todos los demás se vuelven más agresivos.
 - **Su águila:** a veces la manda con un «Freerider». Busca las 8 dianas en las cámaras antes de que te alcance.
