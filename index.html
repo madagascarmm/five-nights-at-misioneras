@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
 <meta name="description" content="Five Nights at Misioneras: un juego de terror de turno de noche en un colegio de monjas.">
 <title>Five Nights at Misioneras</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -675,7 +676,7 @@ TX.en={
   {k:'torno',name:'Sister of the Torno',where:'BEHIND THE TORNO',bio:'No one on staff has seen more of her than one pale hand. She asks for things in Latin, politely, once.',how:'When she knocks, open the torno and send back exactly what she names. One wrong item leaves you four seconds. A second one is fatal.'},
   {k:'prefect',role:'The Prefect',where:'ANY CAMERA · THE DARK',bio:'Keeps discipline in the corridors and believes the night should be silent, including your cameras.',how:'If he is on the camera you are watching, switch away fast or he cuts the feed. If the generator dies, he comes with a candle.'},
   {k:'angel',role:'Keeper of the eagle',where:'THE LODGE · FROM NIGHT 3',bio:'Teaches in a hurry and never repeats anything. Brings his pet eagle to work.',how:'When he shouts HAZ UNA LETRITA, type his word before the timer runs out, or you are stunned for 6 seconds and everyone else gets faster. Sometimes he sends his eagle instead: click the 8 roundels on the cameras.'},
-  ...(progress.goatSeen?[{k:'goat',name:'The Ghost Goat',role:'Rare event',where:'ANY CAMERA · THE LODGE',bio:'It was the goat from the sisters\' vegetable garden. Since 1971 it appears in a nun\'s veil, very rarely.',how:'If you see it on a camera, stop looking. If it then appears sitting in the lodge, raise the cameras again right away or it will eat the night.'}]:[])],
+  ...(progress.goatSeen?[{k:'goat',name:'America',role:'The Ghost Goat · rare event',where:'ANY CAMERA · THE LODGE',bio:'Her name was America and she lived in the sisters\' vegetable garden. The story goes that her owner, Janet, stabbed her one night in 1971. Since then she appears in a nun\'s veil, very rarely.',how:'If you see it on a camera, stop looking. If it then appears sitting in the lodge, raise the cameras again right away or it will eat the night.'}]:[])],
  hTitle:'How to survive',
  helpBody:()=>`<div><h3>CONTROLS</h3><table>
 <tr><td>DOOR</td><td>Tap, or <kbd>Q</kbd> left and <kbd>E</kbd> right. A closed door drains the generator.</td></tr>
@@ -716,7 +717,7 @@ TX.en={
  4:()=>`<p>About the girls in the chapel.</p>
 <p>Christmas, 1963. The power failed during the last choir rehearsal. The votive candles went out one by one, and when the sisters came in with lamps, the stalls were empty. Three girls are still waiting to finish their carol.</p>
 <p>While the candles burn, they face the altar. As the light goes, they turn toward the camera. When the last candle goes out, they stop singing and come looking for an audience. Relight two candles and they will go back.</p>
-<p><i>P.S. If you ever see a goat in a veil on the cameras, stop looking at it. And if you later find it sitting in the lodge, don't just sit there: raise the cameras.</i></p>
+<p><i>P.S. If you ever see America, a goat in a veil, on the cameras, stop looking at it. And if you later find it sitting in the lodge, don't just sit there: raise the cameras.</i></p>
 <p class="sig">S. R.</p>`,
  5:()=>`<p>This is my last entry. I took this post in 1971 and I have not left the building since. Nobody leaves Misioneras. You wind the clock, you grade the exams, you keep the candles lit, and one morning you notice your own portrait already hanging in the hall.</p>
 <p>Reach six o'clock tonight and ${names.founder} will sign your diploma. After that, the lodge is yours.</p>
@@ -795,7 +796,7 @@ TX.en={
   ['Maths','Half of 150?','75',['70','65','80']],
   ['Maths','10% of 300?','30',['3','300','13']]],
  cv_clock:'TOWER CLOCK',cv_tt:'TIMETABLE',cv_ttRows:['Compline  21:00','Matins  00:00','Lauds  06:00'],cv_book:"PORTER'S LOGBOOK",
- cv_plate:'FOUNDER · 1958',cv_board1:'Exams',cv_board2:'Due: 6:00',cv_alms:'ALMS',crash1:'Five Nights at Misioneras has stopped working.',crash2:'The Ghost Goat ate the night.',crash3:'Returning to the title…',
+ cv_plate:'FOUNDER · 1958',cv_board1:'Exams',cv_board2:'Due: 6:00',cv_alms:'ALMS',crash1:'Five Nights at Misioneras has stopped working.',crash2:'America, the Ghost Goat, ate the night.',crash3:'Returning to the title…',
  def_angel:'J. Angel',angelHint:'TYPE THE WORD BEFORE TIME RUNS OUT',angelTap:'Tap here to type',aRoundel:'Roundel',
  c_angelOk:()=>`«Muy bien.» ${names.angel} leaves the lodge.`,c_angelFail:'Too slow. You are stunned, and everyone else is moving faster.',
  c_eagle:()=>`${names.angel}: «Freerider.» Find the 8 roundels on the cameras!`,c_eagleGone:'The eagle flies back to its master.',
@@ -832,7 +833,7 @@ TX.es={
   {k:'torno',name:'La Hermana del Torno',where:'DETRÁS DEL TORNO',bio:'Nadie del personal ha visto de ella más que una mano pálida. Pide las cosas en latín, con educación, una sola vez.',how:'Cuando llame, abre el torno y devuelve exactamente lo que nombre. Con un fallo te quedan cuatro segundos. El segundo fallo es mortal.'},
   {k:'prefect',role:'El Prefecto',where:'CUALQUIER CÁMARA · LA OSCURIDAD',bio:'Mantiene la disciplina en los pasillos y cree que la noche debe ser silenciosa, cámaras incluidas.',how:'Si aparece en la cámara que estás mirando, cambia rápido o cortará la señal. Si el generador se apaga, vendrá con una vela.'},
   {k:'angel',role:'El dueño del águila',where:'LA PORTERÍA · DESDE LA NOCHE 3',bio:'Da clase con prisas y nunca repite nada. Se trae su águila al trabajo.',how:'Cuando grite HAZ UNA LETRITA, escribe su palabra antes de que acabe el tiempo o quedarás aturdida 6 segundos y los demás se acelerarán. A veces manda a su águila: pulsa las 8 dianas en las cámaras.'},
-  ...(progress.goatSeen?[{k:'goat',name:'La Cabra Fantasma',role:'Evento raro',where:'CUALQUIER CÁMARA · LA PORTERÍA',bio:'Era la cabra del huerto de las hermanas. Desde 1971 se aparece con toca de monja, muy de vez en cuando.',how:'Si la ves en una cámara, deja de mirarla. Si luego aparece sentada en la portería, vuelve a subir las cámaras enseguida o se comerá la noche.'}]:[])],
+  ...(progress.goatSeen?[{k:'goat',name:'America',role:'La Cabra Fantasma · evento raro',where:'CUALQUIER CÁMARA · LA PORTERÍA',bio:'Se llamaba America y vivía en el huerto de las hermanas. Cuenta la historia que su dueña, Janet, la apuñaló una noche de 1971. Desde entonces se aparece con toca de monja, muy de vez en cuando.',how:'Si la ves en una cámara, deja de mirarla. Si luego aparece sentada en la portería, vuelve a subir las cámaras enseguida o se comerá la noche.'}]:[])],
  hTitle:'Cómo sobrevivir',
  helpBody:()=>`<div><h3>CONTROLES</h3><table>
 <tr><td>PUERTA</td><td>Toca, o <kbd>Q</kbd> izquierda y <kbd>E</kbd> derecha. Una puerta cerrada gasta generador.</td></tr>
@@ -873,7 +874,7 @@ TX.es={
  4:()=>`<p>Sobre las niñas de la capilla.</p>
 <p>Navidad de 1963. Se fue la luz durante el último ensayo del coro. Las velas votivas se apagaron una a una, y cuando las hermanas entraron con lámparas, los bancos estaban vacíos. Tres niñas siguen esperando para terminar su villancico.</p>
 <p>Mientras las velas ardan, miran al altar. Cuando la luz se va, se giran hacia la cámara. Cuando se apaga la última vela, dejan de cantar y salen a buscar público. Enciende dos velas y volverán a su sitio.</p>
-<p><i>P. D.: Si alguna vez ves una cabra con toca en las cámaras, deja de mirarla. Y si después la encuentras sentada en la portería, no te quedes quieta: sube las cámaras.</i></p>
+<p><i>P. D.: Si alguna vez ves a America, una cabra con toca, en las cámaras, deja de mirarla. Y si después la encuentras sentada en la portería, no te quedes quieta: sube las cámaras.</i></p>
 <p class="sig">S. R.</p>`,
  5:()=>`<p>Esta es mi última entrada. Ocupé este puesto en 1971 y no he salido del edificio desde entonces. Nadie se va de Misioneras. Das cuerda al reloj, corriges los exámenes, mantienes las velas encendidas, y una mañana te das cuenta de que tu propio retrato ya cuelga en la sala.</p>
 <p>Llega a las seis esta noche y ${names.founder} firmará tu diploma. Después, la portería será tuya.</p>
@@ -952,7 +953,7 @@ TX.es={
   ['Matemáticas','¿Cuál es la mitad de 150?','75',['70','65','80']],
   ['Matemáticas','¿El 10 % de 300?','30',['3','300','13']]],
  cv_clock:'RELOJ DE TORRE',cv_tt:'HORARIO',cv_ttRows:['Completas  21:00','Maitines  00:00','Laudes  06:00'],cv_book:'LIBRO DE PORTERÍA',
- cv_plate:'FUNDADOR · 1958',cv_board1:'Exámenes',cv_board2:'Entrega: 6:00',cv_alms:'LIMOSNA',crash1:'Five Nights at Misioneras ha dejado de funcionar.',crash2:'La Cabra Fantasma se ha comido la noche.',crash3:'Volviendo al título…',
+ cv_plate:'FUNDADOR · 1958',cv_board1:'Exámenes',cv_board2:'Entrega: 6:00',cv_alms:'LIMOSNA',crash1:'Five Nights at Misioneras ha dejado de funcionar.',crash2:'America, la Cabra Fantasma, se ha comido la noche.',crash3:'Volviendo al título…',
  def_angel:'J. Angel',angelHint:'ESCRIBE LA PALABRA ANTES DE QUE SE ACABE EL TIEMPO',angelTap:'Toca aquí para escribir',aRoundel:'Diana',
  c_angelOk:()=>`«Muy bien.» ${names.angel} se va de la portería.`,c_angelFail:'Demasiado lenta. Estás aturdida y todos los demás se mueven más rápido.',
  c_eagle:()=>`${names.angel}: «Freerider.» ¡Busca las 8 dianas en las cámaras!`,c_eagleGone:'El águila vuelve con su dueño.',
@@ -1710,9 +1711,9 @@ function devBuild(){
 }
 function devToggle(on){if(!DEV.el)devBuild();DEV.on=on==null?!DEV.on:on;DEV.el.hidden=!DEV.on;clearInterval(DEV.timer);if(DEV.on){devTick();devRenderLog();DEV.timer=setInterval(devTick,250);}}
 function devTick(){const s=DEV.stateEl;if(!s)return;
-  if(!g){s.textContent=`mode ${mode} · lang ${LANG}\ndone [${progress.done.join(',')}] · continue ${progress.current||'-'} · word #${progress.angelIdx||0}/${GLOSSARY.length}`;return;}
+  if(!g){s.textContent=`mode ${mode} · lang ${LANG} · net ${NET.state}\ndone [${progress.done.join(',')}] · continue ${progress.current||'-'} · word #${progress.angelIdx||0}/${GLOSSARY.length}`;return;}
   const A=g.A||{},e=g.eagle;
-  s.textContent=`mode ${mode} · night ${g.night} · ${g.hour===0?12:g.hour}AM (${g.t.toFixed(0)}/${HOUR*6}s)\n`+
+  s.textContent=`mode ${mode} · net ${NET.state} · night ${g.night} · ${g.hour===0?12:g.hour}AM (${g.t.toFixed(0)}/${HOUR*6}s)\n`+
    `power ${g.power.toFixed(1)}% · use ${g.use} · clock ${g.spring.toFixed(0)}${g.clockStopped?' STOPPED':''} · exams ${g.exams}\n`+
    `founder pos ${g.F.pos}${g.F.pos===3?' door '+g.F.door.toFixed(1):''} · examiner pos ${g.E.pos}${g.E.pos===2?' door '+g.E.door.toFixed(1):''}\n`+
    `torno ${g.tor.state}${g.tor.state==='req'?' '+g.tor.want+' '+g.tor.timer.toFixed(1):''} fails ${g.tor.fails} · candles ${g.candles.join('')}${g.choirT!=null?' choir '+g.choirT.toFixed(1):''}\n`+
@@ -1722,6 +1723,85 @@ window.addEventListener('keydown',e=>{const k=e.key;if(k==='F2'||((k==='º'||k==
 function devWire(){let taps=[];
   document.querySelectorAll('h1.title small').forEach(sm=>sm.addEventListener('pointerdown',()=>{const now=performance.now();taps=taps.filter(x=>now-x<2000);taps.push(now);if(taps.length>=5){taps=[];devToggle(true);}}));
   if(location.hash==='#dev')devToggle(true);}
+
+/* ---------- live link to the director's panel (only on the GitHub site, where PeerJS loads) ---------- */
+const NET_ADMIN_ID='fnam-misioneras-director-q7k2v9';
+const NET_PUB={kty:'EC',crv:'P-256',x:'40lSZOJrBxcc8BoJmUYEBi1m7FkXqHD8qpeLAEIwDPk',y:'X43YBtbHHYoWLEu_1iIMwLeWZ1DEq2CrRf2zLNfp0MI'};
+const NET={peer:null,conn:null,ok:false,last:0,state:'off',challenge:null,call:null,streaming:false,sc:null,sx:null,tries:0};
+function netB64(buf){let s='';for(const x of new Uint8Array(buf))s+=String.fromCharCode(x);return btoa(s);}
+function netUnB64(s){const bin=atob(s),b=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);return b;}
+async function netVerify(nonce,sig){try{const k=await crypto.subtle.importKey('jwk',NET_PUB,{name:'ECDSA',namedCurve:'P-256'},false,['verify']);
+  return await crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},k,netUnB64(sig),new TextEncoder().encode('fnam:'+nonce));}catch(e){return false;}}
+function netCfg(){return /[?&]peerlocal\b/.test(location.search)?{host:location.hostname,port:9000,path:'/fnam',secure:false,debug:0}:{debug:0};}
+function netInit(){if(NET.peer||!window.crypto||!crypto.subtle)return;
+  if(!window.Peer){if(++NET.tries<6)setTimeout(netInit,4000);return;}
+  try{NET.peer=new Peer(netCfg());}catch(e){devLog('net: '+e.message);return;}
+  NET.state='connecting';
+  NET.peer.on('open',()=>{NET.state='waiting';netTry();});
+  NET.peer.on('connection',c=>{try{c.close();}catch(e){}});
+  NET.peer.on('call',call=>{try{call.close();}catch(e){}});
+  NET.peer.on('disconnected',()=>{NET.state='connecting';setTimeout(()=>{try{if(NET.peer&&!NET.peer.destroyed&&NET.peer.disconnected)NET.peer.reconnect();}catch(e){}},3000);});
+  NET.peer.on('error',e=>{const ty=e&&e.type;if(ty==='peer-unavailable'){netDrop();return;}devLog('net: '+ty);});
+  setInterval(netTick,12000);setInterval(netSend,330);
+  window.addEventListener('beforeunload',()=>{try{NET.peer&&NET.peer.destroy();}catch(e){}});}
+function netTick(){const p=NET.peer;if(!p||p.destroyed)return;if(p.disconnected){try{p.reconnect();}catch(e){}return;}if(!NET.ok&&!NET.conn)netTry();}
+function netTry(){const p=NET.peer;if(!p||!p.open||NET.conn)return;let c;try{c=p.connect(NET_ADMIN_ID,{reliable:true,serialization:'json'});}catch(e){return;}if(!c)return;NET.conn=c;
+  c.on('open',()=>{const r=new Uint8Array(24);crypto.getRandomValues(r);NET.challenge=netB64(r);try{c.send({t:'challenge',n:NET.challenge,v:2});}catch(e){}});
+  c.on('data',d=>netOnData(c,d));
+  c.on('close',()=>{if(NET.conn===c)netDrop();});
+  c.on('error',()=>{if(NET.conn===c)netDrop();});
+  setTimeout(()=>{if(NET.conn===c&&!NET.ok)netDrop();},10000);}
+function netDrop(){const c=NET.conn;NET.ok=false;NET.conn=null;NET.challenge=null;try{c&&c.close();}catch(e){}netStopStream();if(NET.peer&&NET.peer.open)NET.state='waiting';}
+async function netOnData(c,d){if(!d||typeof d!=='object'||NET.conn!==c)return;NET.last=Date.now();
+  if(!NET.ok){if(d.t==='proof'&&typeof d.sig==='string'&&NET.challenge&&await netVerify(NET.challenge,d.sig)){NET.ok=true;NET.state='director';devLog('net: director conectado');try{c.send({t:'hello',...netInfo()});}catch(e){}}
+    else netDrop();return;}
+  if(d.t==='ping')return;if(d.t==='cmd')netRun(c,d);else if(d.t==='msg')netMsg(c,d);else if(d.t==='watch')netStartStream();else if(d.t==='unwatch')netStopStream();}
+function netInfo(){let dev='ordenador';try{if(matchMedia('(pointer:coarse)').matches)dev='móvil';}catch(e){}return{nm:(nameOv.player||'').slice(0,28),lang:LANG,dev};}
+function netSnap(){const s={m:mode,done:progress.done.length};if(g){s.n=g.night;s.h=g.hour;s.ts=Math.round(g.t);s.pw=Math.round(Math.max(0,g.power));s.sp=Math.round(g.spring);s.ex=g.exams;
+  s.c=g.cams?g.cam:null;s.dl=g.doorL;s.dr=g.doorR;s.F=g.F.pos;s.E=g.E.pos;s.tor=g.tor.state;s.cand=g.candles.reduce((a,b)=>a+b,0);s.P=g.P.cam;
+  s.A=g.A?g.A.mode:null;s.w=g.A&&g.A.mode==='type'?g.A.word:null;s.eg=g.eagle?g.eagle.rs.filter(r=>r.hit).length:null;s.gt=g.goat?g.goat.phase:null;
+  s.st=g.stun>0;s.out=!!g.out;s.dead=g.scare?g.scare.type:null;}return s;}
+function netSend(){if(!NET.ok||!NET.conn||!NET.conn.open)return;if(Date.now()-NET.last>12000){devLog('net: el director no responde');netDrop();return;}try{NET.conn.send({t:'state',s:netSnap(),nm:(nameOv.player||'').slice(0,28)});}catch(e){}}
+const NET_CMDS={
+  founder:()=>{g.cfg.founder=Math.max(1,g.cfg.founder);if(g.F.pos<3){g.F.pos=3;g.F.door=7;g.F.seen=false;AU.creak(-.8);}},
+  examiner:()=>{g.cfg.examiner=Math.max(1,g.cfg.examiner);if(g.E.pos<2){g.E.pos=2;g.E.door=7;g.E.seen=false;AU.knock(.8,3);caption(t('c_knock3'));}},
+  torno:()=>{g.cfg.torno=Math.max(1,g.cfg.torno);if(g.tor.state==='idle')g.tor.next=0;},
+  choir:()=>{g.cfg.choir=Math.max(1,g.cfg.choir);g.candles=[0,0,0,0,0];},
+  prefect:()=>{g.cfg.prefect=Math.max(1,g.cfg.prefect);g.P.cam=g.cams?g.cam:pick(CAMS);g.P.left=12;g.P.gaze=g.cams?-.6:0;if(g.cams){g.camSwitchT=.3;AU.whisper();}},
+  angel:()=>{if(!g.eagle&&!angelActive()&&!g.goat)startTyping();},
+  eagle:()=>{if(!g.eagle&&!angelActive()&&!g.goat)startSend();},
+  goatsign:()=>{if(!g.goat)goatSign();},
+  goatoffice:()=>{if(!g.goat||g.goat.phase==='sign')g.goat={phase:'marked'};},
+  goatflash:()=>{g.goatFlash=.18;AU.bleat(260,.35,.12);},
+  stun:()=>{if(!angelActive()){g.stun=6;AU.stunHit();}},
+  exams:()=>{g.exams+=5;AU.paper(0);},
+  clock:()=>{g.spring=0;},
+  pout:()=>{if(!g.out)powerOut();},
+  p100:()=>{if(!g.out)g.power=100;},
+  hour:()=>{g.t=Math.min(HOUR*6-1,(g.hour+1)*HOUR);},
+  kill:d=>{const ty=['founder','examiner','choir','torno','prefect','eagle','goat'].includes(d.what)?d.what:'founder';scare(ty,true);}
+};
+function netAck(c,d,ok,why){try{c.send({t:'ack',id:d.id,cmd:d.cmd||'msg',ok,why:why||''});}catch(e){}}
+function netRun(c,d){const f=NET_CMDS[d.cmd];if(!f)return netAck(c,d,false,'unknown');if(!g||mode!=='play')return netAck(c,d,false,'no-play');
+  try{f(d);devLog('director: '+d.cmd);netAck(c,d,true);}catch(e){netAck(c,d,false,e.message);}}
+function netMsg(c,d){const text=String(d.text||'').replace(/\s+/g,' ').trim().slice(0,160);if(!text)return;let ok=false;
+  if(g&&mode==='play'){caption(text);ok=true;}if(d.voice&&AU.on){say(text);ok=true;}devLog('director (mensaje): '+text);netAck(c,d,ok,ok?'':'no-play');}
+function netStartStream(){if(NET.call||!NET.ok||!NET.peer)return;if(!NET.sc){NET.sc=document.createElement('canvas');NET.sc.width=640;NET.sc.height=360;NET.sx=NET.sc.getContext('2d');}
+  if(!NET.sc.captureStream)return;netDrawStream();let call;try{call=NET.peer.call(NET_ADMIN_ID,NET.sc.captureStream(12),{metadata:{kind:'view'}});}catch(e){return;}if(!call)return;
+  NET.call=call;NET.streaming=true;call.on('close',()=>{if(NET.call===call)netStopStream();});call.on('error',()=>{if(NET.call===call)netStopStream();});}
+function netStopStream(){NET.streaming=false;const c=NET.call;NET.call=null;try{c&&c.close();}catch(e){}}
+const NET_MODE={lang:'ELIGIENDO IDIOMA',news:'LEYENDO NOVEDADES',title:'EN EL MENÚ',intro:'LEYENDO LA NOTA',dead:'PANTALLA DE MUERTE',win:'6 AM',end:'FINAL',crash:'CUELGUE DE AMERICA'};
+function netDrawStream(){const x=NET.sx;if(!x)return;x.drawImage(cv,0,0,640,360);x.save();x.shadowColor='#000';x.shadowBlur=5;x.fillStyle='#fff';x.font='22px VT323, monospace';
+  if(g&&(mode==='play'||mode==='paused')){x.textAlign='right';x.fillText(`${g.hour===0?12:g.hour} AM · ${g.night==='C'?'PERSONALIZADA':'NOCHE '+g.night}`,630,24);
+    x.textAlign='left';x.fillText(`GENERADOR ${Math.max(0,Math.round(g.power))}%`,10,350);
+    const cap=$('#caption');if(cap.classList.contains('on')){x.textAlign='center';x.font='italic 16px Georgia, serif';x.fillText(cap.textContent.slice(0,90),320,318);}
+    if(g.A&&g.A.mode==='type'){x.textAlign='center';x.font='38px VT323, monospace';x.fillStyle='#ff4a3a';x.fillText(g.A.word,320,170);x.fillStyle='#fff';x.font='26px VT323, monospace';x.fillText(($('#angelInput').value||'')+'▌',320,204);}
+    const panel=!$('#pExam').hidden?'CORRIGIENDO UN EXAMEN':!$('#pTorno').hidden?'ATENDIENDO EL TORNO':!$('#pLog').hidden?'LEYENDO EL LIBRO':'';
+    if(panel){x.textAlign='center';x.font='26px VT323, monospace';x.fillStyle='#f0a63a';x.fillText(panel,320,60);}
+    if(mode==='paused'){x.textAlign='center';x.font='48px VT323, monospace';x.fillStyle='#fff';x.fillText('PAUSA',320,190);}}
+  else{x.textAlign='center';x.font='34px VT323, monospace';x.fillText(NET_MODE[mode]||String(mode).toUpperCase(),320,190);}
+  x.restore();}
+window.addEventListener('load',()=>setTimeout(netInit,1500));
 
 /* ---------- screens ---------- */
 const SCREENS=['sLang','sNews','sCrash','sTitle','sNights','sFaculty','sHelp','sIntro','sDead','sWin','sEnd','sPause'];
@@ -1845,6 +1925,7 @@ function loop(ts){
     if(mode==='play'){update(dt);if(mode==='play')syncHud();}
     if(mode==='scare'){g.scare.t+=dt;if(g.scare.t>=1.85)showDeath(g.scare.type);}
     render(dt);
+    if(NET.streaming&&frameN%5===0)netDrawStream();
   }catch(err){console.error(err);devLog('ERROR '+(err&&err.message||err));}
   requestAnimationFrame(loop);
 }

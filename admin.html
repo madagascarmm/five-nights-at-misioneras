@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel del director · Misioneras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Pirata+One&family=VT323&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js"></script>
+<style>
+/* Layout: a CCTV control room. Header with link status, a broadcast bar, then one card per live player. */
+:root{
+  --bg:#070a09;--panel:#0e1411;--panel-2:#131b17;--line:rgba(169,196,173,.22);--line-2:rgba(169,196,173,.4);
+  --text:#e4eee6;--dim:#8ea595;--cctv:#a9c4ad;--amber:#f0a63a;--red:#ff4a3a;--blue:#7fb2ff;
+  --f-display:'Pirata One',Georgia,serif;--f-body:'IM Fell English',Georgia,serif;--f-hud:'VT323',ui-monospace,'Courier New',monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--text);font:17px/1.4 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px;
+  background-image:radial-gradient(ellipse at 50% -10%,rgba(169,196,173,.08),transparent 60%)}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;padding:22px 0 16px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--f-hud);font-size:18px;letter-spacing:.2em;color:var(--amber)}
+h1{margin:2px 0 0;font-family:var(--f-display);font-weight:400;font-size:52px;line-height:1;text-wrap:balance}
+.status{display:flex;align-items:center;gap:8px;font-family:var(--f-hud);font-size:22px;letter-spacing:.06em;color:var(--dim);flex-wrap:wrap}
+.status b{color:var(--text);font-weight:400;font-variant-numeric:tabular-nums}
+.dot{width:12px;height:12px;border-radius:50%;background:#555;box-shadow:0 0 0 3px rgba(255,255,255,.06)}
+.dot.ok{background:#5fe08a;box-shadow:0 0 10px #5fe08a}.dot.wait{background:var(--amber)}.dot.bad{background:var(--red);box-shadow:0 0 10px var(--red)}
+.keyBox{max-width:520px;margin:48px auto;padding:26px 28px;background:var(--panel);border:1px solid var(--line-2);border-radius:8px}
+.keyBox h2{margin:0 0 6px;font-family:var(--f-display);font-weight:400;font-size:38px}
+.keyBox p{margin:0 0 14px;color:var(--dim)}
+.keyBox form{display:flex;gap:10px;flex-wrap:wrap}
+.keyBox input{flex:1;min-width:0;font:20px var(--f-hud);letter-spacing:.06em;padding:10px 12px;background:#060908;color:var(--text);border:1px solid var(--line-2);border-radius:5px}
+.btn{font-family:var(--f-hud);font-size:20px;letter-spacing:.1em;padding:9px 18px;border-radius:5px;border:1px solid var(--amber);background:rgba(240,166,58,.14);color:var(--amber)}
+.btn:hover{background:rgba(240,166,58,.26)}
+.err{color:var(--red)!important;margin-top:10px!important}
+.bar{margin:18px 0;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+.barHead{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:10px}
+.barHead b{font-family:var(--f-hud);font-weight:400;font-size:24px;letter-spacing:.16em;color:var(--amber)}
+.barHead span{color:var(--dim);font-size:16px}
+.groups{display:grid;gap:8px}
+.grp{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.grp>span{font-family:var(--f-hud);font-size:16px;letter-spacing:.12em;color:var(--dim);min-width:92px;flex:none}
+.pc .grp>span{width:100%;min-width:0}
+.pc .act{font-size:15px;padding:3px 7px}
+.act{font-family:var(--f-hud);font-size:17px;letter-spacing:.04em;padding:4px 9px;border-radius:4px;border:1px solid var(--line-2);background:var(--panel-2);color:var(--text)}
+.act:hover{border-color:var(--cctv);background:#1b2620}
+.act.kill{border-color:rgba(255,74,58,.55);color:#ffb0a8;background:rgba(255,74,58,.08)}
+.act.kill:hover{background:rgba(255,74,58,.2)}
+.act.help{border-color:rgba(127,178,255,.5);color:#cfe0ff}
+.act.armed{background:var(--red);color:#fff;border-color:var(--red)}
+.msg{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.msg input[type=text]{flex:1;min-width:180px;font:18px var(--f-body);padding:7px 10px;background:#060908;color:var(--text);border:1px solid var(--line-2);border-radius:5px}
+.msg label{display:flex;align-items:center;gap:6px;font-family:var(--f-hud);font-size:18px;color:var(--dim)}
+.empty{margin:30px 0;padding:26px;text-align:center;color:var(--dim);border:1px dashed var(--line-2);border-radius:8px;font-size:18px}
+.empty b{display:block;font-family:var(--f-hud);font-weight:400;font-size:26px;letter-spacing:.1em;color:var(--cctv);margin-bottom:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr));gap:14px;align-items:start}
+.pc{display:grid;align-content:start;gap:10px;min-width:0;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+.pc.playing{border-color:var(--line-2)}
+.pcH{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px 10px}
+.pcH .nm{display:block;font-family:var(--f-display);font-weight:400;font-size:30px;line-height:1;overflow-wrap:anywhere}
+.pcH .sub{font-family:var(--f-hud);font-size:16px;letter-spacing:.08em;color:var(--dim)}
+.mode{font-family:var(--f-hud);font-size:20px;letter-spacing:.06em;color:var(--cctv);text-align:right;white-space:nowrap}
+.watch{flex:none;white-space:nowrap;font-family:var(--f-hud);font-size:17px;letter-spacing:.1em;padding:4px 10px;border-radius:4px;border:1px solid var(--cctv);background:transparent;color:var(--cctv)}
+.watch.on{background:var(--cctv);color:#08110b}
+.vid{position:relative;aspect-ratio:16/9;max-width:100%;background:#020403;border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.vid video{width:100%;height:100%;object-fit:contain;display:block}
+.vid .vOff{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-hud);font-size:20px;letter-spacing:.1em;color:var(--dim)}
+.pc.live .vOff{display:none}
+.vid .rec{position:absolute;left:8px;top:6px;font-family:var(--f-hud);font-size:18px;color:var(--red);text-shadow:0 0 4px #000}
+.pc:not(.live) .rec{display:none}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.st{padding:6px 8px;background:var(--panel-2);border-radius:4px;min-width:0}
+.st span{display:block;font-family:var(--f-hud);font-size:14px;letter-spacing:.12em;color:var(--dim)}
+.st b{display:block;font-family:var(--f-hud);font-weight:400;font-size:19px;letter-spacing:0;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st b.low{color:var(--red)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;min-height:24px}
+.chip{font-family:var(--f-hud);font-size:16px;letter-spacing:.04em;padding:1px 8px;border-radius:999px;border:1px solid var(--line-2);color:var(--dim)}
+.chip.bad{border-color:rgba(255,74,58,.6);color:#ffb0a8;background:rgba(255,74,58,.1)}
+.chip.warn{border-color:rgba(240,166,58,.6);color:#ffd59a;background:rgba(240,166,58,.08)}
+.chip.info{border-color:rgba(127,178,255,.4);color:#cfe0ff}
+.pc.idle .groups{opacity:.55}
+.logBox{margin-top:22px}
+.logBox h3{margin:0 0 6px;font-family:var(--f-hud);font-weight:400;font-size:20px;letter-spacing:.18em;color:var(--dim)}
+#log{margin:0;max-height:220px;overflow:auto;padding:10px 12px;background:#050807;border:1px solid var(--line);border-radius:6px;font:16px/1.35 var(--f-hud);color:#9fd0ac;white-space:pre-wrap}
+.foot{margin-top:16px;display:flex;justify-content:flex-end}
+.link{background:none;border:0;color:var(--dim);text-decoration:underline;font-size:15px;padding:0}
+@media (max-width:520px){h1{font-size:40px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.grp>span{width:100%}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div><div class="eyebrow">COLEGIO MISIONERAS · SALA DE CONTROL</div><h1>Panel del director</h1></div>
+  <div class="status"><span class="dot" id="dot"></span><span id="stText">Sin conectar</span><span aria-hidden="true">·</span><b id="count">0</b><span>conectados</span></div>
+</header>
+
+<section class="keyBox" id="keyBox" hidden>
+  <h2>Clave del director</h2>
+  <p>Pega la clave que te dio Claude. Se guarda solo en este navegador.</p>
+  <form id="keyForm"><input id="keyIn" type="password" autocomplete="off" spellcheck="false" aria-label="Clave del director" placeholder="Clave…"><button class="btn">ENTRAR</button></form>
+  <p class="err" id="keyErr" hidden>Esa clave no es correcta. Cópiala entera, sin espacios.</p>
+</section>
+
+<section id="panel" hidden>
+  <div class="bar">
+    <div class="barHead"><b>A TODOS</b><span>Llega a todos los que estén jugando una noche ahora mismo.</span></div>
+    <div class="groups" id="allActs"></div>
+    <form class="msg" id="allMsg"><input type="text" maxlength="160" placeholder="Mensaje para todos…" aria-label="Mensaje para todos"><label><input type="checkbox"> en voz alta</label><button class="btn">ENVIAR</button></form>
+  </div>
+  <div class="empty" id="empty"><b>ESPERANDO JUGADORES</b>Cuando alguien abra el juego en la web, aparecerá aquí en unos segundos.</div>
+  <main class="grid" id="grid"></main>
+  <section class="logBox"><h3>REGISTRO</h3><pre id="log"></pre></section>
+  <footer class="foot"><button class="link" id="forget">Olvidar la clave en este navegador</button></footer>
+</section>
+
+<script>
+'use strict';
+const ADMIN_ID='fnam-misioneras-director-q7k2v9';
+const PUB={kty:'EC',crv:'P-256',x:'40lSZOJrBxcc8BoJmUYEBi1m7FkXqHD8qpeLAEIwDPk',y:'X43YBtbHHYoWLEu_1iIMwLeWZ1DEq2CrRf2zLNfp0MI'};
+const CFG=/[?&]peerlocal\b/.test(location.search)?{host:location.hostname,port:9000,path:'/fnam',secure:false,debug:0}:{debug:0};
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ls={get(k){try{return localStorage.getItem('fnam_director_'+k)}catch(e){return null}},set(k,v){try{localStorage.setItem('fnam_director_'+k,v)}catch(e){}},del(k){try{localStorage.removeItem('fnam_director_'+k)}catch(e){}}};
+const GROUPS=[
+  ['ENEMIGOS','',[['founder','J. Alonso → puerta'],['examiner','H. Sole llama'],['torno','Torno'],['choir','Apagar velas'],['prefect','J. Church en cámara'],['angel','J. Angel: letrita'],['eagle','Águila'],['goatsign','America en cámara'],['goatoffice','America en la portería']]],
+  ['TROLEO','',[['goatflash','BEEE'],['stun','Aturdir 6 s'],['exams','+5 exámenes'],['clock','Parar el reloj'],['pout','Apagón']]],
+  ['AYUDA','help',[['p100','Generador 100%'],['hour','+1 hora']]],
+  ['MATAR','kill',[['kill:founder','J. Alonso'],['kill:examiner','H. Sole'],['kill:choir','Coro'],['kill:torno','Torno'],['kill:prefect','J. Church'],['kill:eagle','Águila'],['kill:goat','America (cuelgue)']]]
+];
+const LABEL=Object.fromEntries(GROUPS.flatMap(g=>g[2]));LABEL.msg='Mensaje';
+const KILLN={founder:'J. Alonso',examiner:'H. Sole',choir:'el coro',torno:'el torno',prefect:'J. Church',eagle:'el águila',goat:'America'};
+const P=new Map();const L=[];let key=null,peer=null,seq=0;
+
+function b64(buf){let s='';for(const x of new Uint8Array(buf))s+=String.fromCharCode(x);return btoa(s);}
+async function loadKey(d){d=String(d||'').trim();if(!/^[A-Za-z0-9_-]{40,50}$/.test(d))throw new Error('formato');
+  const k=await crypto.subtle.importKey('jwk',{...PUB,d,ext:true},{name:'ECDSA',namedCurve:'P-256'},false,['sign']);
+  const m=new TextEncoder().encode('fnam:check'),s=await crypto.subtle.sign({name:'ECDSA',hash:'SHA-256'},k,m);
+  const v=await crypto.subtle.importKey('jwk',PUB,{name:'ECDSA',namedCurve:'P-256'},false,['verify']);
+  if(!await crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},v,s,m))throw new Error('no coincide');return k;}
+async function signN(n){return b64(await crypto.subtle.sign({name:'ECDSA',hash:'SHA-256'},key,new TextEncoder().encode('fnam:'+n)));}
+function status(text,cls){$('#stText').textContent=text;$('#dot').className='dot '+(cls||'');}
+function log(m){const t=new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'});L.push(`[${t}] ${m}`);if(L.length>80)L.shift();$('#log').textContent=L.slice().reverse().join('\n');}
+function who(p){return p.nm||('Anónimo '+p.id.replace(/[^a-z0-9]/gi,'').slice(-4).toUpperCase());}
+function counts(){$('#count').textContent=P.size;$('#empty').hidden=P.size>0;}
+
+function groupsHTML(){return GROUPS.map(([name,cls,acts])=>`<div class="grp"><span>${name}</span>${acts.map(([c,l])=>`<button class="act ${cls}" data-c="${c}">${esc(l)}</button>`).join('')}</div>`).join('');}
+function cmdFrom(c){return c.startsWith('kill:')?{cmd:'kill',what:c.slice(5)}:{cmd:c};}
+function send(p,obj){if(!p.c.open)return false;const id=++seq;try{p.c.send({...obj,id});return true;}catch(e){return false;}}
+function sendCmd(p,c){const o=cmdFrom(c);return send(p,{t:'cmd',...o});}
+function arm(btn,fn){if(btn.dataset.armed==='1'){btn.dataset.armed='';btn.classList.remove('armed');btn.textContent=btn.dataset.l;fn();return;}
+  btn.dataset.armed='1';btn.dataset.l=btn.textContent;btn.textContent='¿SEGURO?';btn.classList.add('armed');setTimeout(()=>{if(btn.dataset.armed==='1'){btn.dataset.armed='';btn.classList.remove('armed');btn.textContent=btn.dataset.l;}},2500);}
+
+function modeText(s){if(!s)return 'Conectando…';
+  if(['play','paused','scare'].includes(s.m)&&s.n!=null){const n=s.n==='C'?'Noche personalizada':'Noche '+s.n;return `${n} · ${s.h===0?12:s.h} AM`+(s.m==='paused'?' · en pausa':'')+(s.m==='scare'?' · ¡susto!':'');}
+  return({lang:'Eligiendo idioma',news:'Leyendo las novedades',title:'En el menú',intro:'Leyendo la nota de la noche',dead:'En la pantalla de muerte',win:'¡Ha llegado a las 6 AM!',end:'Viendo el final',crash:'Cuelgue de America'})[s.m]||s.m;}
+function chips(s){const c=[];if(!s||s.n==null||!['play','paused','scare'].includes(s.m))return c;
+  if(s.F===3)c.push(['J. Alonso en la puerta','bad']);else if(s.F>0)c.push(['J. Alonso caminando','warn']);
+  if(s.E===2)c.push(['H. Sole llamando','bad']);else if(s.E===1)c.push(['H. Sole en el pasillo','warn']);
+  if(s.tor==='req')c.push(['El torno llama','warn']);
+  if(s.cand!=null&&s.cand<=1)c.push(['Velas casi apagadas','bad']);else if(s.cand!=null&&s.cand<=2)c.push(['Pocas velas','warn']);
+  if(s.P)c.push([`J. Church en CAM ${s.P}`,'warn']);
+  if(s.A==='shout'||s.A==='type')c.push([`Letrita: ${s.w||'…'}`,'bad']);if(s.A==='send')c.push(['«Freerider»','bad']);
+  if(s.eg!=null)c.push([`Águila · dianas ${s.eg}/8`,'bad']);
+  if(s.gt)c.push([({sign:'America en una cámara',marked:'America la ha marcado',office:'America en la portería'})[s.gt]||'America','bad']);
+  if(s.st)c.push(['Aturdida','warn']);if(s.out)c.push(['Apagón','bad']);if(s.dead)c.push([`Susto de ${KILLN[s.dead]||s.dead}`,'bad']);
+  if(s.dl)c.push(['Puerta izquierda cerrada','info']);if(s.dr)c.push(['Puerta derecha cerrada','info']);return c;}
+function draw(p){const s=p.s,el=p.el,inNight=!!(s&&s.n!=null&&['play','paused','scare'].includes(s.m));
+  $('.nm',el).textContent=who(p);$('.sub',el).textContent=`${p.dev||''}${p.lang?' · '+p.lang.toUpperCase():''}${s?` · ${s.done||0}/5 noches`:''}`;
+  $('.mode',el).textContent=modeText(s);el.classList.toggle('idle',!inNight);el.classList.toggle('playing',inNight);
+  const v=(k,txt,low)=>{const b=$(`[data-s="${k}"]`,el);b.textContent=txt;b.classList.toggle('low',!!low);};
+  v('pw',inNight?s.pw+'%':'—',inNight&&s.pw<=15);v('sp',inNight?s.sp+'%':'—',inNight&&s.sp<=15);v('ex',inNight?s.ex:'—',inNight&&s.ex>=8);v('c',inNight?(s.c?'CAM '+s.c:'Portería'):'—');
+  const html=chips(s).map(([t,c])=>`<span class="chip ${c}">${esc(t)}</span>`).join('');if(p.lastChips!==html){p.lastChips=html;$('.chips',el).innerHTML=html;}}
+function addP(c,d){const old=P.get(c.peer);if(old)removeCard(old);
+  const el=document.createElement('article');el.className='pc idle';
+  el.innerHTML=`<div class="pcH"><div><b class="nm"></b><span class="sub"></span></div><div style="display:grid;justify-items:end;gap:6px"><span class="mode"></span><button class="watch">VER PARTIDA</button></div></div>
+    <div class="vid" hidden><video muted playsinline autoplay></video><div class="vOff">CONECTANDO EL VÍDEO…</div><span class="rec">● EN DIRECTO</span></div>
+    <div class="stats"><div class="st"><span>GENERADOR</span><b data-s="pw">—</b></div><div class="st"><span>RELOJ</span><b data-s="sp">—</b></div><div class="st"><span>EXÁMENES</span><b data-s="ex">—</b></div><div class="st"><span>MIRANDO</span><b data-s="c">—</b></div></div>
+    <div class="chips"></div><div class="groups">${groupsHTML()}</div>
+    <form class="msg"><input type="text" maxlength="160" placeholder="Mensaje…" aria-label="Mensaje"><label><input type="checkbox"> en voz alta</label><button class="btn">ENVIAR</button></form>`;
+  const p={last:Date.now(),c,id:c.peer,nm:typeof d.nm==='string'?d.nm.slice(0,28):'',lang:d.lang,dev:d.dev,s:null,el,video:$('video',el),watching:false,call:null,lastChips:''};
+  el.querySelectorAll('.act').forEach(b=>b.addEventListener('click',()=>{const c_=b.dataset.c;if(sendCmd(p,c_))log(`→ ${who(p)}: ${LABEL[c_]||c_}`);}));
+  $('.watch',el).addEventListener('click',()=>toggleWatch(p));
+  $('.msg',el).addEventListener('submit',e=>{e.preventDefault();const i=$('input[type=text]',el),v=i.value.trim();if(!v)return;const voice=$('input[type=checkbox]',el).checked;if(send(p,{t:'msg',text:v,voice}))log(`→ ${who(p)}: «${v}»${voice?' (en voz alta)':''}`);i.value='';});
+  P.set(c.peer,p);$('#grid').appendChild(el);draw(p);counts();log(`Se ha conectado ${who(p)} (${p.dev||'?'})`);}
+function removeCard(p){try{p.call&&p.call.close();}catch(e){}p.el.remove();P.delete(p.id);counts();}
+function dropP(c){const p=P.get(c.peer);if(!p||p.c!==c)return;removeCard(p);log(`Se ha ido ${who(p)}`);}
+function onAck(p,d){if(d.ok)return;const why=d.why==='no-play'?'no está jugando una noche':d.why==='unknown'?'orden desconocida':d.why;log(`✗ ${who(p)}: ${LABEL[d.cmd]||d.cmd} no ha llegado (${why})`);}
+function toggleWatch(p){const b=$('.watch',p.el);if(!p.watching){p.watching=true;$('.vid',p.el).hidden=false;b.textContent='DEJAR DE VER';b.classList.add('on');send(p,{t:'watch'});log(`Viendo la pantalla de ${who(p)}`);}
+  else{p.watching=false;b.textContent='VER PARTIDA';b.classList.remove('on');send(p,{t:'unwatch'});try{p.call&&p.call.close();}catch(e){}p.call=null;p.video.srcObject=null;p.el.classList.remove('live');$('.vid',p.el).hidden=true;}}
+function onCall(call){const p=P.get(call.peer);if(!p||!p.watching){try{call.close();}catch(e){}return;}call.answer();p.call=call;
+  call.on('stream',st=>{p.video.srcObject=st;p.video.play().catch(()=>{});p.el.classList.add('live');});
+  call.on('close',()=>{if(p.call!==call)return;p.call=null;p.video.srcObject=null;p.el.classList.remove('live');if(p.watching){p.watching=false;const b=$('.watch',p.el);b.textContent='VER PARTIDA';b.classList.remove('on');$('.vid',p.el).hidden=true;}});}
+function onConn(c){c.on('data',async d=>{if(!d||typeof d!=='object')return;
+    if(d.t==='challenge'){if(typeof d.n==='string'&&d.n.length<=64){try{c.send({t:'proof',sig:await signN(d.n)});}catch(e){}}return;}
+    if(d.t==='hello'){addP(c,d);return;}
+    const p=P.get(c.peer);if(!p||p.c!==c)return;p.last=Date.now();
+    if(d.t==='state'){p.s=d.s||null;if(typeof d.nm==='string')p.nm=d.nm.slice(0,28);draw(p);}else if(d.t==='ack')onAck(p,d);});
+  c.on('close',()=>dropP(c));c.on('error',()=>dropP(c));}
+function start(){if(!window.Peer){status('No se ha podido cargar la conexión. Revisa internet y recarga.','bad');return;}
+  status('Conectando…','wait');peer=new Peer(ADMIN_ID,CFG);
+  peer.on('open',()=>{status('En línea','ok');log('Panel en línea. Esperando jugadores.');});
+  peer.on('error',e=>{const ty=e&&e.type;if(ty==='unavailable-id')status('Ya hay otro panel abierto. Ciérralo y recarga esta página.','bad');else if(ty!=='peer-unavailable'){log('Error de conexión: '+ty);status('Problema de conexión. Reintentando…','wait');}});
+  peer.on('disconnected',()=>{status('Reconectando…','wait');setTimeout(()=>{try{if(peer&&!peer.destroyed&&peer.disconnected)peer.reconnect();}catch(e){}},2500);});
+  peer.on('connection',onConn);peer.on('call',onCall);
+  window.addEventListener('beforeunload',()=>{try{peer.destroy();}catch(e){}});}
+function showPanel(){$('#keyBox').hidden=true;$('#panel').hidden=false;
+  $('#allActs').innerHTML=groupsHTML();
+  $('#allActs').querySelectorAll('.act').forEach(b=>b.addEventListener('click',()=>{const go=()=>{let n=0;for(const p of P.values())if(sendCmd(p,b.dataset.c))n++;log(`→ A TODOS (${n}): ${LABEL[b.dataset.c]||b.dataset.c}`);};
+    if(b.classList.contains('kill'))arm(b,go);else go();}));
+  $('#allMsg').addEventListener('submit',e=>{e.preventDefault();const i=$('#allMsg input[type=text]'),v=i.value.trim();if(!v)return;const voice=$('#allMsg input[type=checkbox]').checked;let n=0;for(const p of P.values())if(send(p,{t:'msg',text:v,voice}))n++;log(`→ A TODOS (${n}): «${v}»${voice?' (en voz alta)':''}`);i.value='';});
+  $('#forget').addEventListener('click',()=>{ls.del('key');location.reload();});
+  counts();start();
+  setInterval(()=>{const now=Date.now();for(const p of [...P.values()]){if(now-p.last>9000){try{p.c.close();}catch(e){}removeCard(p);log(`Se ha ido ${who(p)} (sin señal)`);}else{try{p.c.send({t:'ping'});}catch(e){}}}},3000);}
+async function boot(){if(!window.crypto||!crypto.subtle){status('Abre esta página con https.','bad');return;}
+  const saved=ls.get('key');if(saved){try{key=await loadKey(saved);showPanel();return;}catch(e){ls.del('key');}}
+  $('#keyBox').hidden=false;$('#keyIn').focus();
+  $('#keyForm').addEventListener('submit',async e=>{e.preventDefault();const v=$('#keyIn').value.trim();try{key=await loadKey(v);ls.set('key',v);$('#keyErr').hidden=true;showPanel();}catch(err){$('#keyErr').hidden=false;}});}
+boot();
+</script>
+</body>
+</html>
